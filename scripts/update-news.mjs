@@ -3,7 +3,7 @@ import path from "node:path";
 import { XMLParser } from "fast-xml-parser";
 
 const PROJECT_ROOT = process.cwd();
-const HTML_PATH = path.join(PROJECT_ROOT, "public", "SRS_Diamonds_v15.html");
+const HTML_PATH = path.join(PROJECT_ROOT, "public", "SRS_Diamonds_v16.html");
 const START_MARKER = "<!-- NEWS_GRID_START (auto-managed by scripts/update-news.mjs) -->";
 const END_MARKER = "<!-- NEWS_GRID_END -->";
 
