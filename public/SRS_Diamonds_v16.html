@@ -1495,6 +1495,7 @@ p {
   color: var(--navy);
 }
 .form-group input,
+.form-group select,
 .form-group textarea {
   font-family: var(--font-body);
   font-weight: 200;
@@ -1509,6 +1510,7 @@ p {
   resize: vertical;
 }
 .form-group input:focus,
+.form-group select:focus,
 .form-group textarea:focus {
   border-color: var(--navy);
   box-shadow: 0 0 0 3px rgba(26,26,46,0.05);
@@ -1601,8 +1603,8 @@ footer {
 }
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1.2fr 1.5fr 1.2fr;
-  gap: 60px;
+  grid-template-columns: minmax(0, 1.6fr) repeat(4, minmax(0, 1fr));
+  gap: 28px;
   padding-bottom: 64px;
   border-bottom: 1px solid var(--grey-border);
 }
@@ -1679,12 +1681,17 @@ footer {
 }
 .footer-bottom-links a:hover { color: var(--navy); }
 
+/* CSR */
+#page-csr img[alt="Responsible Jewellery Council"] {
+  height: 112.5px !important; /* 25% larger than previous 90px */
+}
+
 /* ═══════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════ */
 @media (max-width: 1024px) {
   .shapes-grid { grid-template-columns: repeat(3, 1fr); }
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .footer-grid { grid-template-columns: minmax(0, 1.45fr) repeat(4, minmax(0, 1fr)); gap: 20px; }
   .shows-grid-home { grid-template-columns: 1fr 1fr; }
   .events-featured { grid-template-columns: 1fr 1fr; }
 }
@@ -1780,7 +1787,7 @@ footer {
   .events-featured { grid-template-columns: repeat(2, 1fr); }
   .prop-grid { grid-template-columns: 1fr; max-width: 600px; margin: 0 auto; }
   .trust-inner { grid-template-columns: repeat(3, 1fr); }
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .footer-grid { grid-template-columns: minmax(0, 1.45fr) repeat(4, minmax(0, 1fr)); gap: 20px; }
   .two-col { grid-template-columns: 1fr 1fr; gap: 48px; }
   .contact-layout { grid-template-columns: 1fr; }
   .process-layout { grid-template-columns: 1fr; }
@@ -2350,14 +2357,14 @@ nav { height: var(--nav-h); }
         <button class="btn btn-outline-white" onclick="navigate('contact')">Get in Touch</button>
       </div>
     </div>
-    <div class="hero-scroll-cue" onclick="document.getElementById('home-next-section').scrollIntoView({behavior:'smooth', block:'start'})">
+    <div class="hero-scroll-cue" onclick="scrollToHomeNextSection()">
       <span>Discover</span>
       <div class="scroll-arrow"></div>
     </div>
   </section>
 
   <!-- Key Numbers Bar -->
-  <section style="background:var(--white); padding:56px 0; border-bottom:1px solid var(--grey-border);">
+  <section id="home-glance-section" style="background:var(--white); padding:56px 0; border-bottom:1px solid var(--grey-border);">
     <div class="container">
       <div class="section-header center reveal" style="margin-bottom:40px;">
         <div class="overline">SRS at a Glance</div>
@@ -2428,20 +2435,6 @@ nav { height: var(--nav-h); }
       <p class="reveal reveal-d2">Every diamond we source and supply begins with a purpose beyond the trade itself. At SRS, we believe that a natural diamond carries meaning far greater than its carat weight. It is worn close to the skin, given at life's most important moments, and treasured across generations. We take that responsibility seriously in everything we do.</p>
       <div class="reveal reveal-d3">
         <button class="btn btn-gold" onclick="navigate('contact')">Talk to Us Directly</button>
-      </div>
-      <div class="statement-trio reveal reveal-d4">
-        <div class="trio-item">
-          <span class="trio-value">G+</span>
-          <span class="trio-label">Colour Minimum</span>
-        </div>
-        <div class="trio-item">
-          <span class="trio-value">10+</span>
-          <span class="trio-label">Countries Supplied</span>
-        </div>
-        <div class="trio-item">
-          <span class="trio-value">9</span>
-          <span class="trio-label">Shapes Supplied</span>
-        </div>
       </div>
     </div>
   </section>
@@ -2959,6 +2952,113 @@ nav { height: var(--nav-h); }
       </div>
     </div>
   </section>
+  <!-- Company History Section -->
+  <section class="section-blend-navy section-pad">
+    <div class="container">
+      <div class="section-header center reveal">
+        <div class="overline" style="justify-content:center; display:flex;">Where We Started</div>
+        <h2 style="color:var(--white);">Built on the Fundamentals of the Trade</h2>
+        <div class="rule center"></div>
+      </div>
+      <div style="max-width:740px; margin:40px auto 0;" class="reveal">
+        <p style="color:rgba(255,255,255,0.68); margin-bottom:20px;">When SRS began in 2012, our core business was in loose diamonds, small sizes under 1 carat, primarily uncertified round stones supplied in parcels to manufacturers and traders. These are the stones that form the foundation of the jewellery industry, and understanding them completely is what set the standard for everything we do today.</p>
+        <p style="color:rgba(255,255,255,0.68); margin-bottom:20px;">Over the years, as the next generation joined the business, SRS expanded into GIA certified stones across all shapes, rounds and fancies, now holding stock ranging from small sizes up to 5 carats, with select special stones to the 10 carat mark.</p>
+        <p style="color:rgba(255,255,255,0.68);">This growth reflects both the trust our clients place in us and the depth of expertise we bring to every part of the diamond trade, from the smallest parcel to the most significant stone.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Company Milestones -->
+  <section class="section-blend-cream section-pad">
+    <div class="container">
+      <div class="section-header center reveal">
+        <div class="overline" style="color:var(--gold-dark); justify-content:center;">Our Journey</div>
+        <h2 style="color:var(--navy);">SRS Diamonds: Key Milestones</h2>
+        <div class="rule center"></div>
+        <p style="max-width:540px; margin:0 auto; color:#5C5955;">From a single vision in Antwerp to an international presence in the natural diamond trade.</p>
+      </div>
+      <div style="max-width:700px; margin:56px auto 0; position:relative; z-index:1;">
+        <!-- Timeline line -->
+        <div style="position:absolute; left:88px; top:0; bottom:0; width:1px; background:rgba(201,169,97,0.35);"></div>
+
+        <div style="display:flex; flex-direction:column; gap:0;">
+
+          <div class="reveal reveal-d1" style="display:flex; gap:0; padding-bottom:36px;">
+            <div style="font-family:var(--font-ui); font-weight:700; font-size:0.78rem; color:var(--gold-dark); width:88px; flex-shrink:0; padding-top:2px; letter-spacing:0.06em;">Nov 2012</div>
+            <div style="width:12px; height:12px; background:var(--gold); border-radius:50%; flex-shrink:0; margin-top:3px; position:relative; z-index:1;"></div>
+            <div style="padding-left:20px;"><div style="font-family:var(--font-body); font-weight:600; font-size:0.88rem; color:var(--navy); margin-bottom:4px;">SRS Diamonds Founded</div><div style="font-size:0.83rem; color:#5C5955; line-height:1.6;">Rishi Jain establishes SRS Diamonds in Antwerp, Belgium, drawing on over two decades of industry experience.</div></div>
+          </div>
+
+          <div class="reveal reveal-d2" style="display:flex; gap:0; padding-bottom:36px;">
+            <div style="font-family:var(--font-ui); font-weight:700; font-size:0.78rem; color:var(--gold-dark); width:88px; flex-shrink:0; padding-top:2px; letter-spacing:0.06em;">2014</div>
+            <div style="width:12px; height:12px; background:var(--gold); border-radius:50%; flex-shrink:0; margin-top:3px; position:relative; z-index:1;"></div>
+            <div style="padding-left:20px;"><div style="font-family:var(--font-body); font-weight:600; font-size:0.88rem; color:var(--navy); margin-bottom:4px;">First International Show</div><div style="font-size:0.83rem; color:#5C5955; line-height:1.6;">SRS Diamonds participates in its first international trade exhibition, Basel, Switzerland.</div></div>
+          </div>
+
+          <div class="reveal reveal-d3" style="display:flex; gap:0; padding-bottom:36px;">
+            <div style="font-family:var(--font-ui); font-weight:700; font-size:0.78rem; color:var(--gold-dark); width:88px; flex-shrink:0; padding-top:2px; letter-spacing:0.06em;">2016</div>
+            <div style="width:12px; height:12px; background:var(--gold); border-radius:50%; flex-shrink:0; margin-top:3px; position:relative; z-index:1;"></div>
+            <div style="padding-left:20px;"><div style="font-family:var(--font-body); font-weight:600; font-size:0.88rem; color:var(--navy); margin-bottom:4px;">Own Office Premises Acquired</div><div style="font-size:0.83rem; color:#5C5955; line-height:1.6;">SRS Diamonds purchases its own office space in Antwerp, marking a significant step in the company's growth and permanence in the trade.</div></div>
+          </div>
+
+          <div class="reveal reveal-d1" style="display:flex; gap:0; padding-bottom:36px;">
+            <div style="font-family:var(--font-ui); font-weight:700; font-size:0.78rem; color:var(--gold-dark); width:88px; flex-shrink:0; padding-top:2px; letter-spacing:0.06em;">Nov 2018</div>
+            <div style="width:12px; height:12px; background:var(--gold); border-radius:50%; flex-shrink:0; margin-top:3px; position:relative; z-index:1;"></div>
+            <div style="padding-left:20px;"><div style="font-family:var(--font-body); font-weight:600; font-size:0.88rem; color:var(--navy); margin-bottom:4px;">Move to Current Headquarters</div><div style="font-size:0.83rem; color:#5C5955; line-height:1.6;">SRS Diamonds officially moves into its current headquarters at CBS Building, 1-7 Schupstraat, Antwerp, the address from which the business operates today.</div></div>
+          </div>
+
+          <div class="reveal reveal-d2" style="display:flex; gap:0; padding-bottom:36px;">
+            <div style="font-family:var(--font-ui); font-weight:700; font-size:0.78rem; color:var(--gold-dark); width:88px; flex-shrink:0; padding-top:2px; letter-spacing:0.06em;">2020s</div>
+            <div style="width:12px; height:12px; background:var(--gold); border-radius:50%; flex-shrink:0; margin-top:3px; position:relative; z-index:1;"></div>
+            <div style="padding-left:20px;"><div style="font-family:var(--font-body); font-weight:600; font-size:0.88rem; color:var(--navy); margin-bottom:4px;">Global Show Presence Established</div><div style="font-size:0.83rem; color:#5C5955; line-height:1.6;">SRS exhibits and attends the world's leading jewellery fairs including JCK Las Vegas, GemGenève, EPHJ Geneva, Vicenza Oro, Munich Inhorgenta, Singapore and Hong Kong. Specific first-attendance dates to be confirmed.</div></div>
+          </div>
+
+          <div class="reveal reveal-d3" style="display:flex; gap:0;">
+            <div style="font-family:var(--font-ui); font-weight:700; font-size:0.78rem; color:var(--gold-dark); width:88px; flex-shrink:0; padding-top:2px; letter-spacing:0.06em;">Today</div>
+            <div style="width:12px; height:12px; background:var(--gold); border-radius:50%; flex-shrink:0; margin-top:3px; position:relative; z-index:1;"></div>
+            <div style="padding-left:20px;"><div style="font-family:var(--font-body); font-weight:600; font-size:0.88rem; color:var(--navy); margin-bottom:4px;">14 Years. 10+ Countries. Still Growing.</div><div style="font-size:0.83rem; color:#5C5955; line-height:1.6;">A team of seven specialists. GIA certified stock across all major shapes. A reputation built stone by stone, client by client, over more than a decade in Antwerp.</div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section-blend-navy section-pad">
+    <div class="container">
+      <div class="section-header center reveal">
+        <div class="overline" style="justify-content:center; display:flex;">The SRS Difference</div>
+        <h2 style="color:var(--white);">Why Choose SRS?</h2>
+        <div class="rule center"></div>
+        <p style="max-width:560px; margin:0 auto; color:rgba(255,255,255,0.68);">Three things that set us apart. Not one. All three, every time.</p>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:48px; position:relative; z-index:1;">
+        <div class="reveal reveal-d1" style="padding:44px 32px; background:var(--white); border:1px solid var(--grey-border); border-radius:3px; border-top:3px solid var(--gold); text-align:center;">
+          <div style="width:52px;height:52px;background:rgba(201,169,97,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <h3 style="font-family:var(--font-body);font-weight:600;font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--navy);margin-bottom:14px;">Unmatched Quality</h3>
+          <p style="font-size:0.88rem;color:#5C5955;line-height:1.75;">Every stone is assessed by multiple trained eyes within our team. G+ colour, IF to SI2 clarity, top make. Without exception. Our standard never moves.</p>
+        </div>
+        <div class="reveal reveal-d2" style="padding:44px 32px; background:var(--white); border:1px solid var(--grey-border); border-radius:3px; border-top:3px solid var(--gold); text-align:center;">
+          <div style="width:52px;height:52px;background:rgba(201,169,97,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3 style="font-family:var(--font-body);font-weight:600;font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--navy);margin-bottom:14px;">Personal Service</h3>
+          <p style="font-size:0.88rem;color:#5C5955;line-height:1.75;">When you contact SRS, you reach our team directly, not a ticketing system or call centre. Every client, large or small, receives the same personal attention and commitment.</p>
+        </div>
+        <div class="reveal reveal-d3" style="padding:44px 32px; background:var(--white); border:1px solid var(--grey-border); border-radius:3px; border-top:3px solid var(--gold); text-align:center;">
+          <div style="width:52px;height:52px;background:rgba(201,169,97,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3 style="font-family:var(--font-body);font-weight:600;font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--navy);margin-bottom:14px;">Delivery You Can Count On</h3>
+          <p style="font-size:0.88rem;color:#5C5955;line-height:1.75;">Your deadline is our deadline. We hold ourselves to the same standard we expect from our own suppliers. We understand exactly how it feels when goods arrive late.</p>
+        </div>
+      </div>
+    </div>
+  </section>
   <section class="section-blend-cream section-pad">
     <div class="container">
       <div class="section-header center reveal">
@@ -2987,113 +3087,6 @@ nav { height: var(--nav-h); }
           <span class="value-roman">IV</span>
           <h3>Family</h3>
           <p>Personal service and lasting partnerships, always.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- Company History Section -->
-  <section class="section-blend-cream section-pad">
-    <div class="container">
-      <div class="section-header center reveal">
-        <div class="overline" style="justify-content:center; display:flex;">Where We Started</div>
-        <h2>Built on the Fundamentals of the Trade</h2>
-        <div class="rule center"></div>
-      </div>
-      <div style="max-width:740px; margin:40px auto 0;" class="reveal">
-        <p style="color:#5C5955; margin-bottom:20px;">When SRS began in 2012, our core business was in loose diamonds, small sizes under 1 carat, primarily uncertified round stones supplied in parcels to manufacturers and traders. These are the stones that form the foundation of the jewellery industry, and understanding them completely is what set the standard for everything we do today.</p>
-        <p style="color:#5C5955; margin-bottom:20px;">Over the years, as the next generation joined the business, SRS expanded into GIA certified stones across all shapes, rounds and fancies, now holding stock ranging from small sizes up to 5 carats, with select special stones to the 10 carat mark.</p>
-        <p style="color:#5C5955;">This growth reflects both the trust our clients place in us and the depth of expertise we bring to every part of the diamond trade, from the smallest parcel to the most significant stone.</p>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- Company Milestones -->
-  <section class="section-blend-navy section-pad">
-    <div class="container">
-      <div class="section-header center reveal">
-        <div class="overline" style="color:var(--gold); justify-content:center;">Our Journey</div>
-        <h2 style="color:var(--white);">SRS Diamonds: Key Milestones</h2>
-        <div class="rule center"></div>
-        <p style="max-width:540px; margin:0 auto; color:rgba(255,255,255,0.6);">From a single vision in Antwerp to an international presence in the natural diamond trade.</p>
-      </div>
-      <div style="max-width:700px; margin:56px auto 0; position:relative; z-index:1;">
-        <!-- Timeline line -->
-        <div style="position:absolute; left:88px; top:0; bottom:0; width:1px; background:rgba(201,169,97,0.2);"></div>
-
-        <div style="display:flex; flex-direction:column; gap:0;">
-
-          <div class="reveal reveal-d1" style="display:flex; gap:0; padding-bottom:36px;">
-            <div style="font-family:var(--font-ui); font-weight:700; font-size:0.78rem; color:var(--gold); width:88px; flex-shrink:0; padding-top:2px; letter-spacing:0.06em;">Nov 2012</div>
-            <div style="width:12px; height:12px; background:var(--gold); border-radius:50%; flex-shrink:0; margin-top:3px; position:relative; z-index:1;"></div>
-            <div style="padding-left:20px;"><div style="font-family:var(--font-body); font-weight:600; font-size:0.88rem; color:var(--white); margin-bottom:4px;">SRS Diamonds Founded</div><div style="font-size:0.83rem; color:rgba(255,255,255,0.55); line-height:1.6;">Rishi Jain establishes SRS Diamonds in Antwerp, Belgium, drawing on over two decades of industry experience.</div></div>
-          </div>
-
-          <div class="reveal reveal-d2" style="display:flex; gap:0; padding-bottom:36px;">
-            <div style="font-family:var(--font-ui); font-weight:700; font-size:0.78rem; color:var(--gold); width:88px; flex-shrink:0; padding-top:2px; letter-spacing:0.06em;">2014</div>
-            <div style="width:12px; height:12px; background:var(--gold); border-radius:50%; flex-shrink:0; margin-top:3px; position:relative; z-index:1;"></div>
-            <div style="padding-left:20px;"><div style="font-family:var(--font-body); font-weight:600; font-size:0.88rem; color:var(--white); margin-bottom:4px;">First International Show</div><div style="font-size:0.83rem; color:rgba(255,255,255,0.55); line-height:1.6;">SRS Diamonds participates in its first international trade exhibition, Basel, Switzerland.</div></div>
-          </div>
-
-          <div class="reveal reveal-d3" style="display:flex; gap:0; padding-bottom:36px;">
-            <div style="font-family:var(--font-ui); font-weight:700; font-size:0.78rem; color:var(--gold); width:88px; flex-shrink:0; padding-top:2px; letter-spacing:0.06em;">2016</div>
-            <div style="width:12px; height:12px; background:var(--gold); border-radius:50%; flex-shrink:0; margin-top:3px; position:relative; z-index:1;"></div>
-            <div style="padding-left:20px;"><div style="font-family:var(--font-body); font-weight:600; font-size:0.88rem; color:var(--white); margin-bottom:4px;">Own Office Premises Acquired</div><div style="font-size:0.83rem; color:rgba(255,255,255,0.55); line-height:1.6;">SRS Diamonds purchases its own office space in Antwerp, marking a significant step in the company's growth and permanence in the trade.</div></div>
-          </div>
-
-          <div class="reveal reveal-d1" style="display:flex; gap:0; padding-bottom:36px;">
-            <div style="font-family:var(--font-ui); font-weight:700; font-size:0.78rem; color:var(--gold); width:88px; flex-shrink:0; padding-top:2px; letter-spacing:0.06em;">Nov 2018</div>
-            <div style="width:12px; height:12px; background:var(--gold); border-radius:50%; flex-shrink:0; margin-top:3px; position:relative; z-index:1;"></div>
-            <div style="padding-left:20px;"><div style="font-family:var(--font-body); font-weight:600; font-size:0.88rem; color:var(--white); margin-bottom:4px;">Move to Current Headquarters</div><div style="font-size:0.83rem; color:rgba(255,255,255,0.55); line-height:1.6;">SRS Diamonds officially moves into its current headquarters at CBS Building, 1-7 Schupstraat, Antwerp, the address from which the business operates today.</div></div>
-          </div>
-
-          <div class="reveal reveal-d2" style="display:flex; gap:0; padding-bottom:36px;">
-            <div style="font-family:var(--font-ui); font-weight:700; font-size:0.78rem; color:var(--gold); width:88px; flex-shrink:0; padding-top:2px; letter-spacing:0.06em;">2020s</div>
-            <div style="width:12px; height:12px; background:var(--gold); border-radius:50%; flex-shrink:0; margin-top:3px; position:relative; z-index:1;"></div>
-            <div style="padding-left:20px;"><div style="font-family:var(--font-body); font-weight:600; font-size:0.88rem; color:var(--white); margin-bottom:4px;">Global Show Presence Established</div><div style="font-size:0.83rem; color:rgba(255,255,255,0.55); line-height:1.6;">SRS exhibits and attends the world's leading jewellery fairs including JCK Las Vegas, GemGenève, EPHJ Geneva, Vicenza Oro, Munich Inhorgenta, Singapore and Hong Kong. Specific first-attendance dates to be confirmed.</div></div>
-          </div>
-
-          <div class="reveal reveal-d3" style="display:flex; gap:0;">
-            <div style="font-family:var(--font-ui); font-weight:700; font-size:0.78rem; color:var(--gold); width:88px; flex-shrink:0; padding-top:2px; letter-spacing:0.06em;">Today</div>
-            <div style="width:12px; height:12px; background:var(--gold); border-radius:50%; flex-shrink:0; margin-top:3px; position:relative; z-index:1;"></div>
-            <div style="padding-left:20px;"><div style="font-family:var(--font-body); font-weight:600; font-size:0.88rem; color:var(--white); margin-bottom:4px;">14 Years. 10+ Countries. Still Growing.</div><div style="font-size:0.83rem; color:rgba(255,255,255,0.55); line-height:1.6;">A team of seven specialists. GIA certified stock across all major shapes. A reputation built stone by stone, client by client, over more than a decade in Antwerp.</div></div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <section class="section-blend-cream section-pad">
-    <div class="container">
-      <div class="section-header center reveal">
-        <div class="overline" style="justify-content:center; display:flex;">The SRS Difference</div>
-        <h2>Why Choose SRS?</h2>
-        <div class="rule center"></div>
-        <p style="max-width:560px; margin:0 auto; color:#5C5955;">Three things that set us apart. Not one. All three, every time.</p>
-      </div>
-      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:48px; position:relative; z-index:1;">
-        <div class="reveal reveal-d1" style="padding:44px 32px; background:var(--white); border:1px solid var(--grey-border); border-radius:3px; border-top:3px solid var(--gold); text-align:center;">
-          <div style="width:52px;height:52px;background:rgba(201,169,97,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <h3 style="font-family:var(--font-body);font-weight:600;font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--navy);margin-bottom:14px;">Unmatched Quality</h3>
-          <p style="font-size:0.88rem;color:#5C5955;line-height:1.75;">Every stone is assessed by multiple trained eyes within our team. G+ colour, IF to SI2 clarity, top make. Without exception. Our standard never moves.</p>
-        </div>
-        <div class="reveal reveal-d2" style="padding:44px 32px; background:var(--white); border:1px solid var(--grey-border); border-radius:3px; border-top:3px solid var(--gold); text-align:center;">
-          <div style="width:52px;height:52px;background:rgba(201,169,97,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <h3 style="font-family:var(--font-body);font-weight:600;font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--navy);margin-bottom:14px;">Personal Service</h3>
-          <p style="font-size:0.88rem;color:#5C5955;line-height:1.75;">When you contact SRS, you reach our team directly, not a ticketing system or call centre. Every client, large or small, receives the same personal attention and commitment.</p>
-        </div>
-        <div class="reveal reveal-d3" style="padding:44px 32px; background:var(--white); border:1px solid var(--grey-border); border-radius:3px; border-top:3px solid var(--gold); text-align:center;">
-          <div style="width:52px;height:52px;background:rgba(201,169,97,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <h3 style="font-family:var(--font-body);font-weight:600;font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--navy);margin-bottom:14px;">Delivery You Can Count On</h3>
-          <p style="font-size:0.88rem;color:#5C5955;line-height:1.75;">Your deadline is our deadline. We hold ourselves to the same standard we expect from our own suppliers. We understand exactly how it feels when goods arrive late.</p>
         </div>
       </div>
     </div>
@@ -3201,7 +3194,7 @@ nav { height: var(--nav-h); }
               <div class="step-num">06</div>
               <div class="step-content">
                 <h3>Delivery &amp; Support</h3>
-                <p>Insured shipping worldwide. Full documentation and certification where required. An ongoing relationship — we are here after the order, not just before it.</p>
+                <p>Insured shipping worldwide. Full documentation and certification where required. An ongoing relationship, we are here after the order too, not just before it.</p>
               </div>
             </div>
           </div>
@@ -3247,7 +3240,8 @@ nav { height: var(--nav-h); }
           <div class="overline">Enquiry Form</div>
           <h2>Tell Us What<br>You're Looking For</h2>
           <div class="rule"></div>
-          <p style="margin-bottom:36px;">Complete the form below and we'll respond personally within 24 business hours.</p>
+          <p style="margin-bottom:10px;">Complete the form below and we'll respond personally within 24 business hours.</p>
+          <p style="margin-bottom:36px; font-size:0.82rem; color:#8A8880;">Fields marked with * are mandatory.</p>
           <form id="contactForm" onsubmit="return validateForm(event)">
             <div class="form-row">
               <div class="form-group">
@@ -3266,12 +3260,39 @@ nav { height: var(--nav-h); }
               </div>
               <div class="form-group">
                 <label>Phone *</label>
-                <input type="tel" id="f-phone" name="phone" required placeholder="+1 234 567 890">
+                <input type="tel" id="f-phone" name="phone" required placeholder="+32 3 233 0827 or 0032 3 233 0827">
+                <p style="margin-top:8px; margin-bottom:0; font-size:0.75rem; color:#8A8880;">Please include your country code (e.g. +32 or 0032).</p>
               </div>
             </div>
             <div class="form-group">
               <label>Country *</label>
-              <input type="text" id="f-country" name="country" required placeholder="Your country">
+              <input type="text" id="f-country" name="country" required list="country-list" placeholder="Start typing and select your country" autocomplete="off">
+              <datalist id="country-list">
+                <option value="Afghanistan"></option><option value="Albania"></option><option value="Algeria"></option><option value="Andorra"></option><option value="Angola"></option><option value="Antigua and Barbuda"></option><option value="Argentina"></option><option value="Armenia"></option><option value="Australia"></option><option value="Austria"></option><option value="Azerbaijan"></option>
+                <option value="Bahamas"></option><option value="Bahrain"></option><option value="Bangladesh"></option><option value="Barbados"></option><option value="Belarus"></option><option value="Belgium"></option><option value="Belize"></option><option value="Benin"></option><option value="Bhutan"></option><option value="Bolivia"></option><option value="Bosnia and Herzegovina"></option><option value="Botswana"></option><option value="Brazil"></option><option value="Brunei"></option><option value="Bulgaria"></option><option value="Burkina Faso"></option><option value="Burundi"></option>
+                <option value="Cabo Verde"></option><option value="Cambodia"></option><option value="Cameroon"></option><option value="Canada"></option><option value="Central African Republic"></option><option value="Chad"></option><option value="Chile"></option><option value="China"></option><option value="Colombia"></option><option value="Comoros"></option><option value="Congo"></option><option value="Costa Rica"></option><option value="Cote d'Ivoire"></option><option value="Croatia"></option><option value="Cuba"></option><option value="Cyprus"></option><option value="Czech Republic"></option>
+                <option value="Democratic Republic of the Congo"></option><option value="Denmark"></option><option value="Djibouti"></option><option value="Dominica"></option><option value="Dominican Republic"></option>
+                <option value="Ecuador"></option><option value="Egypt"></option><option value="El Salvador"></option><option value="Equatorial Guinea"></option><option value="Eritrea"></option><option value="Estonia"></option><option value="Eswatini"></option><option value="Ethiopia"></option>
+                <option value="Fiji"></option><option value="Finland"></option><option value="France"></option>
+                <option value="Gabon"></option><option value="Gambia"></option><option value="Georgia"></option><option value="Germany"></option><option value="Ghana"></option><option value="Greece"></option><option value="Grenada"></option><option value="Guatemala"></option><option value="Guinea"></option><option value="Guinea-Bissau"></option><option value="Guyana"></option>
+                <option value="Haiti"></option><option value="Honduras"></option><option value="Hong Kong"></option><option value="Hungary"></option>
+                <option value="Iceland"></option><option value="India"></option><option value="Indonesia"></option><option value="Iran"></option><option value="Iraq"></option><option value="Ireland"></option><option value="Israel"></option><option value="Italy"></option>
+                <option value="Jamaica"></option><option value="Japan"></option><option value="Jordan"></option>
+                <option value="Kazakhstan"></option><option value="Kenya"></option><option value="Kiribati"></option><option value="Korea, North"></option><option value="Korea, South"></option><option value="Kuwait"></option><option value="Kyrgyzstan"></option>
+                <option value="Laos"></option><option value="Latvia"></option><option value="Lebanon"></option><option value="Lesotho"></option><option value="Liberia"></option><option value="Libya"></option><option value="Liechtenstein"></option><option value="Lithuania"></option><option value="Luxembourg"></option>
+                <option value="Madagascar"></option><option value="Malawi"></option><option value="Malaysia"></option><option value="Maldives"></option><option value="Mali"></option><option value="Malta"></option><option value="Marshall Islands"></option><option value="Mauritania"></option><option value="Mauritius"></option><option value="Mexico"></option><option value="Micronesia"></option><option value="Moldova"></option><option value="Monaco"></option><option value="Mongolia"></option><option value="Montenegro"></option><option value="Morocco"></option><option value="Mozambique"></option><option value="Myanmar"></option>
+                <option value="Namibia"></option><option value="Nauru"></option><option value="Nepal"></option><option value="Netherlands"></option><option value="New Zealand"></option><option value="Nicaragua"></option><option value="Niger"></option><option value="Nigeria"></option><option value="North Macedonia"></option><option value="Norway"></option>
+                <option value="Oman"></option>
+                <option value="Pakistan"></option><option value="Palau"></option><option value="Palestine"></option><option value="Panama"></option><option value="Papua New Guinea"></option><option value="Paraguay"></option><option value="Peru"></option><option value="Philippines"></option><option value="Poland"></option><option value="Portugal"></option>
+                <option value="Qatar"></option>
+                <option value="Romania"></option><option value="Russia"></option><option value="Rwanda"></option>
+                <option value="Saint Kitts and Nevis"></option><option value="Saint Lucia"></option><option value="Saint Vincent and the Grenadines"></option><option value="Samoa"></option><option value="San Marino"></option><option value="Sao Tome and Principe"></option><option value="Saudi Arabia"></option><option value="Senegal"></option><option value="Serbia"></option><option value="Seychelles"></option><option value="Sierra Leone"></option><option value="Singapore"></option><option value="Slovakia"></option><option value="Slovenia"></option><option value="Solomon Islands"></option><option value="Somalia"></option><option value="South Africa"></option><option value="South Sudan"></option><option value="Spain"></option><option value="Sri Lanka"></option><option value="Sudan"></option><option value="Suriname"></option><option value="Sweden"></option><option value="Switzerland"></option><option value="Syria"></option>
+                <option value="Taiwan"></option><option value="Tajikistan"></option><option value="Tanzania"></option><option value="Thailand"></option><option value="Timor-Leste"></option><option value="Togo"></option><option value="Tonga"></option><option value="Trinidad and Tobago"></option><option value="Tunisia"></option><option value="Turkey"></option><option value="Turkmenistan"></option><option value="Tuvalu"></option>
+                <option value="Uganda"></option><option value="Ukraine"></option><option value="United Arab Emirates"></option><option value="United Kingdom"></option><option value="United States"></option><option value="Uruguay"></option><option value="Uzbekistan"></option>
+                <option value="Vanuatu"></option><option value="Vatican City"></option><option value="Venezuela"></option><option value="Vietnam"></option>
+                <option value="Yemen"></option>
+                <option value="Zambia"></option><option value="Zimbabwe"></option>
+              </datalist>
             </div>
             <div class="form-group">
               <label style="font-family:var(--font-ui); font-weight:500; font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--navy); display:block; margin-bottom:10px;">I'm Interested In <span style="color:var(--grey-mid); font-weight:300;">(optional)</span></label>
@@ -4011,12 +4032,17 @@ nav { height: var(--nav-h); }
         <ul class="footer-links">
           <li><a onclick="navigate('guide')">Diamond Guide</a></li>
           <li><a onclick="navigate('faq')">FAQ</a></li>
-          <li><a onclick="navigate('events')">2025 Events</a></li>
+          <li><a onclick="navigate('events')">2026 Events</a></li>
           <li><a onclick="navigate('news')">News &amp; Insights</a></li>
-          <li><a onclick="navigate('events')">GemGenève — May</a></li>
-          <li><a onclick="navigate('events')">EPHJ Geneva · 16–19 June</a></li>
-          <li><a onclick="navigate('events')">Vicenza Oro · 4–8 Sept</a></li>
-          <li><a onclick="navigate('contact')">Get in Touch</a></li>
+          <li><a onclick="navigate('events')">GemGenève · 7-10 May 2026</a></li>
+          <li><a onclick="navigate('events')">EPHJ Geneva · 16–19 June 2026</a></li>
+          <li><a onclick="navigate('events')">Vicenza Oro · 4–8 Sept 2026</a></li>
+        </ul>
+      </div>
+      <div>
+        <span class="footer-col-title">Get in Touch</span>
+        <ul class="footer-links">
+          <li><a onclick="navigate('contact')">Contact</a></li>
           <li><a href="mailto:info@srsdiamonds.com">info@srsdiamonds.com</a></li>
         </ul>
       </div>
@@ -4363,6 +4389,27 @@ function initParticles() {
 
 
 // ── CONTACT FORM VALIDATION ──
+function scrollToHomeNextSection() {
+  const target = document.getElementById('home-glance-section');
+  if (!target) return;
+  const startY = window.scrollY;
+  const navH = (document.getElementById('mainNav')?.offsetHeight || 88);
+  const targetY = target.getBoundingClientRect().top + window.scrollY - navH - 10;
+  const duration = 1200;
+  const start = performance.now();
+  const easeInOutCubic = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+  function step(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeInOutCubic(progress);
+    window.scrollTo(0, startY + (targetY - startY) * eased);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+
+  requestAnimationFrame(step);
+}
+
 async function validateForm(e) {
   e.preventDefault();
   const fields = ['f-name','f-company','f-email','f-phone','f-country','f-message'];
@@ -4381,9 +4428,37 @@ async function validateForm(e) {
       el.style.borderColor = '';
     }
   });
+  const emailValue = document.getElementById('f-email').value.trim();
+  const phoneValue = document.getElementById('f-phone').value.trim();
+  const emailEl = document.getElementById('f-email');
+  const phoneEl = document.getElementById('f-phone');
+
+  // Basic email format validation.
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailValue);
+  if (!emailOk) {
+    if (emailEl) emailEl.style.borderColor = '#C0392B';
+    valid = false;
+  }
+
+  // Require international prefix (+ or 00), while allowing spaces/dashes/parentheses.
+  const compactPhone = phoneValue.replace(/[\s\-()]/g, '');
+  const phoneOk = /^\+\d{6,15}$/.test(compactPhone) || /^00\d{6,15}$/.test(compactPhone);
+  if (!phoneOk) {
+    if (phoneEl) phoneEl.style.borderColor = '#C0392B';
+    valid = false;
+  }
+
   if (!valid) {
+    const errMsg = errEl.querySelector('p');
+    if (errMsg) {
+      errMsg.textContent = 'Please complete required fields correctly. Email must be valid and phone must include country code (+ or 00).';
+    }
     errEl.style.display = 'block';
     return false;
+  }
+  const errMsg = errEl.querySelector('p');
+  if (errMsg) {
+    errMsg.textContent = 'Please fill in all required fields before submitting.';
   }
   errEl.style.display = 'none';
   const name = document.getElementById('f-name').value.trim();
