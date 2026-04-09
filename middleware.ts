@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Toggle this flag when you want to show maintenance mode.
-const MAINTENANCE_MODE = false;
+const MAINTENANCE_MODE = true;
 
 const LIVE_PAGE_PATH = "/SRS_Diamonds_v16.html";
 const MAINTENANCE_PAGE_PATH = "/maintenance.html";
