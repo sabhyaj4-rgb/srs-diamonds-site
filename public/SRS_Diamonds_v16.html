@@ -4412,6 +4412,8 @@ function scrollToHomeNextSection() {
   requestAnimationFrame(step);
 }
 
+const CONTACT_FORM_ENDPOINT = 'https://formspree.io/f/mykbqnoa';
+
 async function validateForm(e) {
   e.preventDefault();
   const fields = ['f-name','f-company','f-email','f-phone','f-country','f-message'];
@@ -4478,9 +4480,12 @@ async function validateForm(e) {
   }
 
   try {
-    const res = await fetch('/api/contact', {
+    const res = await fetch(CONTACT_FORM_ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
       body: JSON.stringify({ name, company, email, phone, country, message, interests, shapes }),
     });
 
