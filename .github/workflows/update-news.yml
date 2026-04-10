@@ -37,6 +37,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/SRS_Diamonds_v15.html
+          git add public/SRS_Diamonds_v16.html
           git commit -m "chore: refresh news and insights"
           git push
