@@ -34,7 +34,8 @@ const CATEGORY_META = {
   },
 };
 
-// Grid composition pattern keeps visual variety and category balance.
+// Pick candidates by category mix, then sort the final grid newest → oldest so
+// "All" and every filter tab show articles in chronological order.
 const SLOT_PATTERN = [
   "mining",
   "market",
@@ -285,8 +286,9 @@ function buildCardHtml(article) {
   const safeLink = escapeHtml(article.link);
   const dateText = formatDate(article.pubDate);
 
+  const publishedIso = article.pubDate.toISOString();
   return [
-    `        <a class="news-card reveal ${article.revealClass}" data-source="${article.slotCategory}" href="${safeLink}" target="_blank" rel="noopener">`,
+    `        <a class="news-card reveal ${article.revealClass}" data-source="${article.slotCategory}" data-published="${publishedIso}" href="${safeLink}" target="_blank" rel="noopener noreferrer">`,
     "          <div class=\"news-card-inner\">",
     `            <div class="news-meta"><span class="news-source-badge" style="${meta.badgeStyle}">${meta.badge}</span><span class="news-date">${dateText}</span></div>`,
     `            <h3 class="news-title">${safeTitle}</h3>`,
@@ -345,7 +347,13 @@ async function main() {
     );
   }
 
-  const cardsHtml = selected.map(buildCardHtml).join("\n\n");
+  const revealCycle = ["reveal-d1", "reveal-d2", "reveal-d3"];
+  const sorted = sortNewestFirst(selected).map((article, i) => ({
+    ...article,
+    revealClass: revealCycle[i % 3],
+  }));
+
+  const cardsHtml = sorted.map(buildCardHtml).join("\n\n");
   const updated = replaceNewsGrid(html, cardsHtml);
 
   await fs.writeFile(HTML_PATH, updated, "utf8");
