@@ -855,20 +855,20 @@ p {
 .shape-img {
   width: 100%;
   aspect-ratio: 1;
-  background: linear-gradient(160deg, #1a1830 0%, #0d0c1a 60%, #141228 100%);
+  background: linear-gradient(160deg, #e9edf3 0%, #dde4ee 58%, #d2dce9 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  padding: 0;
+  padding: 20px;
   box-sizing: border-box;
 }
 .shape-img::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 55%, rgba(201,169,97,0.13) 0%, rgba(201,169,97,0.04) 45%, transparent 72%);
+  background: radial-gradient(ellipse at 50% 55%, rgba(201,169,97,0.14) 0%, rgba(201,169,97,0.05) 45%, transparent 72%);
   pointer-events: none;
   z-index: 0;
 }
@@ -881,8 +881,8 @@ p {
   opacity: 0;
   transition: opacity 0.3s;
 }
-.shape-card:hover .shape-img { background: linear-gradient(160deg, #221f3d 0%, #100e22 60%, #1a1630 100%); }
-.shape-card:hover .shape-img::before { background: radial-gradient(ellipse at 50% 55%, rgba(201,169,97,0.22) 0%, rgba(201,169,97,0.07) 45%, transparent 72%); }
+.shape-card:hover .shape-img { background: linear-gradient(160deg, #e3e9f2 0%, #d6deeb 58%, #cad5e5 100%); }
+.shape-card:hover .shape-img::before { background: radial-gradient(ellipse at 50% 55%, rgba(201,169,97,0.18) 0%, rgba(201,169,97,0.07) 45%, transparent 72%); }
 .shape-card:hover .shape-img::after { opacity: 1; }
 .shape-svg-wrap {
   width: 86%;
@@ -896,7 +896,17 @@ p {
   position: relative;
   z-index: 1;
 }
-.shape-card:hover .shape-svg-wrap { transform: scale(1.1); }
+.shape-photo {
+  width: 32%;
+  height: 32%;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.4s var(--ease);
+}
+.shape-card:hover .shape-photo { transform: scale(1.08); }
 .shape-info {
   padding: 20px 22px 24px;
   border-top: 1px solid var(--grey-border);
@@ -4040,43 +4050,43 @@ nav { height: var(--nav-h); }
 // ═══════════════════════════════════════════
 const shapes = [
   {
-    id: 'rounds', name: 'Round', tagline: 'The benchmark of brilliance', svgType: 'circle',
+    id: 'rounds', name: 'Round', tagline: 'The benchmark of brilliance', svgType: 'circle', image: '/diamond-shapes/round.png',
     description: 'The most sought-after diamond shape for over a century. 58 facets engineered for maximum light return. At SRS, every round is evaluated for exceptional cut grade, proportions, and finish quality.',
     uncert: '-2 and above', cert: '0.30ct and above', make: 'Excellent Cut only',
     why: ['Superior make quality that maximises brilliance across every size', 'Consistent grading across parcels for manufacturing reliability', 'Production-ready goods, precise measurements guaranteed']
   },
   {
-    id: 'pears', name: 'Pear', tagline: 'Grace by design', svgType: 'pear',
+    id: 'pears', name: 'Pear', tagline: 'Grace by design', svgType: 'pear', image: '/diamond-shapes/pear.png',
     description: 'First cut in the 1400s, the pear remains one of the most challenging shapes to perfect. There is no universal standard. Every pear is personal. At SRS, we precisely gauge, measure, and match to your exact ratio requirements.',
     uncert: '0.03ct to 0.90ct', cert: '0.50ct and above', make: 'Superior brilliance,<br>minimal bow-tie',
     why: ['Custom ratio matching: elongated, full, or balanced to your exact specification', 'Consistent make quality across all sizes', 'Precise measurements to your stated requirement']
   },
   {
-    id: 'marquise', name: 'Marquise', tagline: 'Dramatic flair', svgType: 'marquise',
+    id: 'marquise', name: 'Marquise', tagline: 'Dramatic flair', svgType: 'marquise', image: '/diamond-shapes/marquise.png',
     description: 'Named after the Marquise de Pompadour, this shape delivers maximum presence and elongation. The perfect marquise requires matched shoulders and defined tips. At SRS, we source only those with exceptional symmetry and optimal ratios.',
     uncert: '0.03ct to 0.90ct', cert: '0.50ct and above', make: 'Matched shoulders, clean tips, superior brilliance',
     why: ['Exceptional symmetry and proportions — the hardest thing to find in this shape', 'Custom ratio requirements accommodated', 'Top make quality without exception']
   },
   {
-    id: 'ovals', name: 'Oval', tagline: 'Modern elegance', svgType: 'oval',
+    id: 'ovals', name: 'Oval', tagline: 'Modern elegance', svgType: 'oval', image: '/diamond-shapes/oval.png',
     description: 'The fastest-growing shape in modern jewellery — more finger coverage, more presence, all the fire of a brilliant cut. Most ovals suffer from bow-tie effect or poor proportions. At SRS, we reject those. What reaches you is the exception.',
     uncert: '0.10ct to 0.90ct', cert: '0.50ct and above', make: 'Minimal bow-tie, exceptional light performance',
     why: ['Superior make quality — ovals with visible bow-tie are rejected outright', 'Custom ratio matching (1.35 to 1.50 or as specified by you)', 'Consistent quality across the full size range']
   },
   {
-    id: 'hearts', name: 'Heart', tagline: 'Perfected symmetry', svgType: 'heart',
+    id: 'hearts', name: 'Heart', tagline: 'Perfected symmetry', svgType: 'heart', image: '/diamond-shapes/heart.png',
     description: 'One of the most challenging shapes to cut perfectly. Symmetry is everything — even lobes, a clean cleft, a sharp defined point. Most hearts on the market fail this test. At SRS, only those that pass reach our clients.',
     uncert: '0.10ct to 0.90ct', cert: '0.50ct and above', make: 'Perfect symmetry, balanced lobes, optimal brilliance',
     why: ['Exceptional symmetry — the standard that eliminates most of the market', 'Consistent quality and appearance across parcels', 'Top make with strong light performance throughout']
   },
   {
-    id: 'emerald', name: 'Emerald Cut', tagline: 'Hall of mirrors', svgType: 'emerald',
+    id: 'emerald', name: 'Emerald Cut', tagline: 'Hall of mirrors', svgType: 'emerald', image: '/diamond-shapes/emerald-cut.png',
     description: 'Brilliant cuts sparkle. Emerald cuts glow. The step-cut facets create mirror-like flashes that reveal everything — making clarity and colour completely paramount. At SRS, we source emerald cuts with exceptional clarity and crisp step structure.',
     uncert: '0.10ct to 0.90ct', cert: '0.50ct and above', make: 'Clean corners, sharp geometry, superior step structure',
     why: ['High clarity standards — step cuts expose everything, we source accordingly', 'True symmetry and precise proportions in every stone', 'Top make quality — crisp geometry is non-negotiable']
   },
   {
-    id: 'baguettes', name: 'Baguette', tagline: 'Architectural precision', svgType: 'baguette',
+    id: 'baguettes', name: 'Baguette', tagline: 'Architectural precision', svgType: 'baguette', image: '/diamond-shapes/baguette.png',
     description: 'Clean lines. Sharp edges. Understated elegance. Baguettes are the architectural element of fine jewellery — and they require precise cutting and exceptional clarity to achieve their signature look. At SRS, we supply baguettes with crisp structure and consistent dimensions.',
     uncert: '0.10ct to 0.90ct', cert: '0.50ct and above', make: 'Sharp corners, precise proportions, excellent finish',
     why: ['Consistent dimensions for setting ease — critical when used as side stones', 'High clarity standards for full step-cut transparency', 'Top make in every stone, every parcel']
@@ -4113,7 +4123,7 @@ function renderShapeCards(containerId) {
   el.innerHTML = shapes.map((s, i) => {
     return `<a class="shape-card reveal reveal-d${Math.min(i+1,6)}" onclick="navigateShape('${s.id}')">
       <div class="shape-img">
-        <div class="shape-svg-wrap">${getShapeSVG(s.svgType)}</div>
+        <img class="shape-photo" src="${s.image || ''}" alt="${s.name} diamond shape" loading="lazy" decoding="async">
       </div>
       <div class="shape-info">
         <h3>${s.name}</h3>
