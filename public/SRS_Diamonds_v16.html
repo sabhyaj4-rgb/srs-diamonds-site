@@ -2272,6 +2272,187 @@ nav { height: var(--nav-h); }
   .team-grid-card { grid-column: span 1; }
   [style*="grid-template-columns:repeat(3,1fr)"] { grid-template-columns: 1fr 1fr !important; }
 }
+
+/* ── STARTER RESPONSIVE OPTIMISATIONS (mobile + tablet only) ── */
+@media (max-width: 1024px) {
+  .container,
+  .nav-inner,
+  .page-hero-inner {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .hero-map-wrap {
+    right: 2%;
+    width: min(46vw, 520px);
+  }
+
+  .team-card {
+    gap: 32px;
+    padding: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container,
+  .nav-inner,
+  .page-hero-inner {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .hero-content {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 56px;
+  }
+
+  .hero h1 {
+    white-space: normal;
+    line-height: 1.12;
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 100%;
+  }
+
+  .hero-actions {
+    width: 100%;
+    gap: 12px;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-map-wrap {
+    width: min(70vw, 420px);
+    opacity: 0.55;
+  }
+
+  .mobile-menu {
+    padding: 96px 20px 40px;
+    gap: 28px;
+    overflow-y: auto;
+    justify-content: flex-start;
+  }
+
+  .mobile-menu a {
+    font-size: clamp(1.4rem, 7vw, 2rem);
+    text-align: center;
+  }
+
+  /* Keep image/content blocks fluid on smaller viewports */
+  img,
+  svg,
+  video,
+  iframe {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Protect against narrow-screen overflow from inline min-width rows */
+  [style*="min-width:100px"] { min-width: 76px !important; }
+  [style*="min-width:80px"] { min-width: 64px !important; }
+}
+
+@media (max-width: 480px) {
+  .container,
+  .nav-inner,
+  .page-hero-inner,
+  .hero-content {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .section-pad { padding: 56px 0; }
+  .section-pad-lg { padding: 72px 0; }
+
+  .mobile-menu {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .hero-map-wrap {
+    width: min(82vw, 360px);
+    opacity: 0.45;
+  }
+}
+
+/* ── DEVICE PASS: iPad + iPhone tuning only ── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .nav-inner { padding: 0 28px; }
+  .nav-links { gap: 26px; }
+  .nav-links a { font-size: 0.72rem; letter-spacing: 0.14em; }
+  .nav-cta-btn { padding: 10px 20px !important; }
+
+  /* Reduce tablet squeeze on inline split sections */
+  [style*="grid-template-columns:1fr 1fr; gap:80px"] {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  html, body { overflow-x: hidden; }
+  html { -webkit-text-size-adjust: 100%; }
+
+  /* Improve tap comfort for touch devices */
+  .btn,
+  .news-filter,
+  .nav-cta-btn {
+    min-height: 44px;
+  }
+
+  .news-title,
+  .news-desc {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Stack common inline 2-column layouts used in content sections */
+  [style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  [style*="grid-template-columns:repeat(4,1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Keep timeline rails inside iPhone viewport */
+  [style*="left:88px"] { left: 64px !important; }
+  [style*="width:88px; flex-shrink:0"] { width: 64px !important; }
+
+  [style*="margin-top:80px; padding-top:60px"] {
+    margin-top: 56px !important;
+    padding-top: 40px !important;
+  }
+
+  [style*="padding:52px 48px"] {
+    padding: 36px 24px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .news-filter { width: 100%; text-align: center; }
+
+  [style*="grid-template-columns:repeat(4,1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  [style*="left:88px"] { left: 56px !important; }
+  [style*="width:88px; flex-shrink:0"] { width: 56px !important; }
+}
 </style>
 </head>
 <body>
