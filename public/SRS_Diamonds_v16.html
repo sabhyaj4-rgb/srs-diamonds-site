@@ -245,20 +245,66 @@ nav.scrolled {
   background: #F5F1EB;
   z-index: 999;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .mobile-menu.open { display: flex; }
-.mobile-menu a {
+.mobile-menu-panel {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mobile-menu .mobile-link,
+.mobile-menu .mobile-parent {
   font-family: var(--font-display);
-  font-size: 2.2rem;
+  font-size: clamp(1.25rem, 6vw, 2rem);
   color: var(--navy);
   text-decoration: none;
   cursor: pointer;
   transition: color 0.2s;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 8px 0;
 }
-.mobile-menu a:hover { color: var(--gold); }
+.mobile-menu .mobile-link:hover,
+.mobile-menu .mobile-parent:hover { color: var(--gold); }
+.mobile-item { border-bottom: 1px solid rgba(26,26,46,0.08); padding-bottom: 8px; }
+.mobile-item:last-child { border-bottom: none; }
+.mobile-parent-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.mobile-caret {
+  font-size: 0.9rem;
+  opacity: 0.65;
+  transition: transform 0.2s var(--ease);
+}
+.mobile-item.open .mobile-caret { transform: rotate(180deg); }
+.mobile-submenu {
+  display: none;
+  padding: 2px 0 8px 14px;
+}
+.mobile-item.open .mobile-submenu { display: block; }
+.mobile-sublink {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 1rem;
+  color: var(--navy);
+  opacity: 0.78;
+  text-decoration: none;
+  padding: 7px 0;
+}
 .mobile-close {
   position: absolute;
   top: 24px; right: 32px;
@@ -2346,9 +2392,10 @@ nav { height: var(--nav-h); }
     justify-content: flex-start;
   }
 
-  .mobile-menu a {
+  .mobile-menu .mobile-link,
+  .mobile-menu .mobile-parent {
     font-size: clamp(1.4rem, 7vw, 2rem);
-    text-align: center;
+    text-align: left;
   }
 
   /* Keep image/content blocks fluid on smaller viewports */
@@ -2511,19 +2558,55 @@ nav { height: var(--nav-h); }
 
 <div class="mobile-menu" id="mobileMenu">
   <button class="mobile-close" onclick="toggleMenu()">×</button>
-  <a onclick="navigate('home'); toggleMenu()">Home</a>
-  <a onclick="navigate('about'); toggleMenu()">About</a>
-  <a onclick="navigate('team'); toggleMenu()" style="font-size:1.4rem; opacity:0.65;">Our Team</a>
-  <a onclick="navigate('csr'); toggleMenu()" style="font-size:1.4rem; opacity:0.65;">CSR &amp; Responsibility</a>
-  <a onclick="navigate('diamonds'); toggleMenu()">Our Diamonds</a>
-  <a onclick="navigate('process'); toggleMenu()">Process</a>
-  <a onclick="navigate('guide'); toggleMenu()">Diamond Guide</a>
-  <a onclick="navigate('events'); toggleMenu()">Events</a>
-  <a onclick="navigate('news'); toggleMenu()" style="font-size:1.4rem; opacity:0.65;">News &amp; Insights</a>
-  <a onclick="navigate('faq'); toggleMenu()">FAQ</a>
-  <a onclick="navigate('contact'); toggleMenu()">Contact</a>s</a>
-  <a onclick="navigate('faq'); toggleMenu()">FAQ</a>
-  <a onclick="navigate('contact'); toggleMenu()">Contact</a>
+  <div class="mobile-menu-panel">
+    <a class="mobile-link" onclick="navigate('home'); closeMenu()">Home</a>
+
+    <div class="mobile-item has-children" data-menu="about">
+      <div class="mobile-parent-row">
+        <button class="mobile-parent" onclick="toggleMobileSubmenu('about')">About</button>
+        <span class="mobile-caret">▾</span>
+      </div>
+      <div class="mobile-submenu" id="mobileSubmenu-about">
+        <a class="mobile-sublink" onclick="navigate('about'); closeMenu()">Our Story</a>
+        <a class="mobile-sublink" onclick="navigate('team'); closeMenu()">Our Team</a>
+        <a class="mobile-sublink" onclick="navigate('csr'); closeMenu()">CSR &amp; Responsibility</a>
+      </div>
+    </div>
+
+    <div class="mobile-item has-children" data-menu="diamonds">
+      <div class="mobile-parent-row">
+        <button class="mobile-parent" onclick="toggleMobileSubmenu('diamonds')">Our Diamonds</button>
+        <span class="mobile-caret">▾</span>
+      </div>
+      <div class="mobile-submenu" id="mobileSubmenu-diamonds">
+        <a class="mobile-sublink" onclick="navigateShape('rounds'); closeMenu()">Round</a>
+        <a class="mobile-sublink" onclick="navigateShape('pears'); closeMenu()">Pear</a>
+        <a class="mobile-sublink" onclick="navigateShape('marquise'); closeMenu()">Marquise</a>
+        <a class="mobile-sublink" onclick="navigateShape('ovals'); closeMenu()">Oval</a>
+        <a class="mobile-sublink" onclick="navigateShape('hearts'); closeMenu()">Heart</a>
+        <a class="mobile-sublink" onclick="navigateShape('emerald'); closeMenu()">Emerald Cut</a>
+        <a class="mobile-sublink" onclick="navigateShape('baguettes'); closeMenu()">Baguette</a>
+        <a class="mobile-sublink" onclick="navigate('diamonds'); closeMenu()">View All Shapes</a>
+      </div>
+    </div>
+
+    <a class="mobile-link" onclick="navigate('process'); closeMenu()">Process</a>
+    <a class="mobile-link" onclick="navigate('guide'); closeMenu()">Diamond Guide</a>
+
+    <div class="mobile-item has-children" data-menu="events">
+      <div class="mobile-parent-row">
+        <button class="mobile-parent" onclick="toggleMobileSubmenu('events')">Events</button>
+        <span class="mobile-caret">▾</span>
+      </div>
+      <div class="mobile-submenu" id="mobileSubmenu-events">
+        <a class="mobile-sublink" onclick="navigate('events'); closeMenu()">Exhibitions</a>
+        <a class="mobile-sublink" onclick="navigate('news'); closeMenu()">News &amp; Insights</a>
+      </div>
+    </div>
+
+    <a class="mobile-link" onclick="navigate('faq'); closeMenu()">FAQ</a>
+    <a class="mobile-link" onclick="navigate('contact'); closeMenu()">Contact</a>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
@@ -4418,7 +4501,32 @@ function navigateShape(id) {
 // MOBILE MENU
 // ═══════════════════════════════════════════
 function toggleMenu() {
-  document.getElementById('mobileMenu').classList.toggle('open');
+  const menu = document.getElementById('mobileMenu');
+  const isOpening = !menu.classList.contains('open');
+  menu.classList.toggle('open', isOpening);
+  document.body.style.overflow = isOpening ? 'hidden' : '';
+  if (!isOpening) closeMobileSubmenus();
+}
+
+function closeMenu() {
+  const menu = document.getElementById('mobileMenu');
+  menu.classList.remove('open');
+  document.body.style.overflow = '';
+  closeMobileSubmenus();
+}
+
+function closeMobileSubmenus() {
+  document.querySelectorAll('.mobile-item.has-children').forEach(item => {
+    item.classList.remove('open');
+  });
+}
+
+function toggleMobileSubmenu(menuKey) {
+  const target = document.querySelector(`.mobile-item.has-children[data-menu="${menuKey}"]`);
+  if (!target) return;
+  const shouldOpen = !target.classList.contains('open');
+  closeMobileSubmenus();
+  if (shouldOpen) target.classList.add('open');
 }
 
 // ═══════════════════════════════════════════
