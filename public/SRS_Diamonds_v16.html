@@ -970,6 +970,10 @@ p {
   transition: transform 0.4s var(--ease);
 }
 .shape-card:hover .shape-photo { transform: scale(1.08); }
+#home-shapes-grid .shape-card[data-shape="pears"] .shape-photo {
+  filter: brightness(1.06) contrast(1.09) saturate(1.02);
+  image-rendering: -webkit-optimize-contrast;
+}
 .shape-info {
   padding: 20px 22px 24px;
   border-top: 1px solid var(--grey-border);
@@ -4520,7 +4524,7 @@ function renderShapeCards(containerId) {
   const el = document.getElementById(containerId);
   if (!el) return;
   el.innerHTML = shapes.map((s, i) => {
-    return `<a class="shape-card reveal reveal-d${Math.min(i+1,6)}" onclick="navigateShape('${s.id}')">
+    return `<a class="shape-card reveal reveal-d${Math.min(i+1,6)}" data-shape="${s.id}" onclick="navigateShape('${s.id}')">
       <div class="shape-img">
         <img class="shape-photo" src="${s.image || ''}" alt="${s.name} diamond shape" loading="lazy" decoding="async">
       </div>
