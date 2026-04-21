@@ -54,6 +54,7 @@
 :root {
   --navy:        #1C1A30;
   --navy-deep:   #141228;
+  --hero-dark-bg: linear-gradient(135deg, #15172a 0%, #26243d 42%, #191a30 100%);
   --white:       #FFFFFF;
   --cream:       #FAF8F4;
   --cream-mid:   #F2EFE8;
@@ -507,7 +508,7 @@ p {
 ═══════════════════════════════════════════ */
 .hero {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0d0c1a 0%, #1C1A30 40%, #0f0e1f 100%);
+  background: var(--hero-dark-bg);
   display: flex;
   align-items: center;
   position: relative;
@@ -533,7 +534,7 @@ p {
   position: absolute;
   left: 0; top: 0;
   width: 100%; height: 100%;
-  background-image: radial-gradient(circle, rgba(201,169,97,0.08) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(201,169,97,0.1) 1px, transparent 1px);
   background-size: 36px 36px;
   mask-image: radial-gradient(ellipse 60% 80% at 10% 50%, black 0%, transparent 70%);
 }
@@ -542,7 +543,7 @@ p {
   right: 10%; top: 20%;
   width: 40vw; height: 40vw;
   max-width: 600px; max-height: 600px;
-  background: radial-gradient(circle, rgba(201,169,97,0.08) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(201,169,97,0.12) 0%, transparent 68%);
   border-radius: 50%;
 }
 
@@ -2047,6 +2048,26 @@ footer {
     radial-gradient(ellipse 60% 80% at 20% 50%, rgba(201,169,97,0.09) 0%, transparent 55%),
     radial-gradient(ellipse 40% 60% at 85% 20%, rgba(201,169,97,0.06) 0%, transparent 50%);
   pointer-events: none;
+}
+
+/* Match dark section backgrounds to updated home hero tone */
+.trust-strip,
+.statement,
+.trio-item,
+.shows-teaser,
+.visual-block,
+.standards-box,
+.event-card-header,
+.shape-hero-section,
+.contact-card,
+.section-blend-navy,
+.team-photo-placeholder,
+.team-grid-photo {
+  background: var(--hero-dark-bg);
+}
+
+.page [style*="background:var(--navy)"] {
+  background: var(--hero-dark-bg) !important;
 }
 
 /* Nav height adjustment for bigger logo */
