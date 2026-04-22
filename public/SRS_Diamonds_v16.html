@@ -1282,6 +1282,54 @@ p {
 }
 .step-content p { font-size: 0.95rem; }
 
+.process-side { position: relative; }
+.process-machines {
+  margin-top: 455px;
+  background: var(--white);
+  border: 1px solid var(--grey-border);
+  border-radius: 3px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.process-machines-title {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 4px;
+  grid-column: 1 / -1;
+}
+.process-machine-item {
+  border: 1px solid var(--grey-border);
+  border-radius: 3px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.process-machine-item img {
+  width: 100%;
+  max-width: 170px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  margin: 0 auto;
+}
+.process-machine-label {
+  margin-top: 10px;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy);
+  text-align: center;
+}
+
 .standards-box {
   background: var(--navy);
   border-radius: 3px;
@@ -1812,6 +1860,8 @@ footer {
   .contact-layout { grid-template-columns: 1fr; gap: 48px; }
   .form-row { grid-template-columns: 1fr; }
   .process-layout { grid-template-columns: 1fr; }
+  .process-machines { grid-template-columns: 1fr; }
+  .process-machines { margin-top: 28px; }
   .standards-box { position: static; }
   .shape-hero-grid { grid-template-columns: 1fr; }
   .shape-hero-visual { max-width: 180px; margin: 0 auto 40px; order: -1; }
@@ -3626,7 +3676,7 @@ nav { height: var(--nav-h); }
             </div>
           </div>
         </div>
-        <div class="reveal-right">
+        <div class="reveal-right process-side">
           <div class="standards-box">
             <h3>Our Non-Negotiables</h3>
             <ul class="standards-list">
@@ -3640,6 +3690,17 @@ nav { height: var(--nav-h); }
             </ul>
             <div style="margin-top:40px;">
               <button class="btn btn-gold" onclick="navigate('contact')" style="width:100%; justify-content:center;">Work With Us</button>
+            </div>
+          </div>
+          <div class="process-machines reveal reveal-d4">
+            <div class="process-machines-title">Diamond Screening Equipment</div>
+            <div class="process-machine-item">
+              <img src="/process/m-screen-4-0.png" alt="M-Screen 4.0 machine used for natural origin verification">
+              <div class="process-machine-label">M-Screen 4.0</div>
+            </div>
+            <div class="process-machine-item">
+              <img src="/process/yehuda-sherlock-holmes-4-0.png" alt="Yehuda Sherlock Holmes 4.0 machine used for natural origin verification">
+              <div class="process-machine-label">Yehuda Sherlock Holmes 4.0</div>
             </div>
           </div>
         </div>
