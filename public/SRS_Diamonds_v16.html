@@ -1189,63 +1189,6 @@ p {
   border: 1px solid rgba(201,169,97,0.2);
   border-radius: 50%;
 }
-.antwerp-view-panel {
-  background: var(--white);
-  border: 1px solid var(--grey-border);
-  border-radius: 3px;
-  overflow: hidden;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.08);
-}
-.antwerp-view-panel img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-}
-.antwerp-view-caption {
-  padding: 12px 16px;
-  font-family: var(--font-ui);
-  font-weight: 500;
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold-dark);
-  background: #FCFBF8;
-  border-top: 1px solid var(--grey-border);
-}
-.antwerp-skyline-section {
-  position: relative;
-  background-image: url('/about/antwerp-view.png');
-  background-size: cover;
-  background-position: center 64%;
-  background-repeat: no-repeat;
-  overflow: hidden;
-}
-.antwerp-skyline-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(9,16,26,0.52) 0%, rgba(9,16,26,0.58) 100%),
-    radial-gradient(ellipse at 30% 28%, rgba(226,163,78,0.20) 0%, transparent 55%);
-}
-.antwerp-skyline-content {
-  position: relative;
-  z-index: 1;
-  max-width: 760px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 28px 24px;
-}
-.antwerp-skyline-content h2 { color: var(--white); }
-.antwerp-skyline-content .rule { margin-left: auto; margin-right: auto; }
-.antwerp-skyline-content .overline { justify-content: center; color: var(--gold-light); }
-.antwerp-skyline-content .overline::before { background: var(--gold-light); }
-.antwerp-skyline-content p {
-  color: rgba(255,255,255,0.85);
-  max-width: 640px;
-  margin: 0 auto;
-}
 
 .pull-quote {
   margin: 32px 0;
@@ -3615,13 +3558,13 @@ nav { height: var(--nav-h); }
       </div>
     </div>
   </section>
-  <section class="section-pad antwerp-skyline-section">
+  <section class="section-blend-cream section-pad">
     <div class="container">
-      <div class="antwerp-skyline-content reveal">
-        <div class="overline">Antwerp</div>
+      <div class="section-header center reveal">
+        <div class="overline" style="justify-content:center;">Antwerp</div>
         <h2>The Heart of the Diamond World</h2>
-        <div class="rule"></div>
-        <p>For over a decade, we have operated from Antwerp's diamond district, the world's diamond capital. Direct relationships with master cutters, access to the finest goods, and expertise built over generations.</p>
+        <div class="rule center"></div>
+        <p style="max-width:580px; margin:0 auto;">For over a decade, we have operated from Antwerp's diamond district, the world's diamond capital. Direct relationships with master cutters, access to the finest goods, and expertise built over generations.</p>
       </div>
     </div>
   </section>
