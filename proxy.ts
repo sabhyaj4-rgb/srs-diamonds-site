@@ -7,7 +7,7 @@ const MAINTENANCE_MODE = false;
 const LIVE_PAGE_PATH = "/SRS_Diamonds_v16.html";
 const MAINTENANCE_PAGE_PATH = "/maintenance.html";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip framework/static routes.
@@ -40,4 +40,3 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: ["/:path*"],
 };
-
