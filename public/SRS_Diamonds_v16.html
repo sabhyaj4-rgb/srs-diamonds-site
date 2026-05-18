@@ -1042,6 +1042,22 @@ p {
   max-width: 860px;
   margin: 0 auto;
 }
+@media (max-width: 768px) {
+  .shows-grid-home.two-cards {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    width: 100%;
+    gap: 16px;
+  }
+  .shows-teaser .show-card {
+    width: 100%;
+    min-width: 0;
+  }
+  .shows-teaser .show-meta {
+    letter-spacing: 0.06em;
+    line-height: 1.45;
+  }
+}
 .show-card {
   border: 1px solid var(--grey-border);
   border-radius: 3px;
@@ -2716,12 +2732,20 @@ nav { height: var(--nav-h); }
     line-height: 1.35;
   }
 
-  /* Where to find us cards: reduce vertical footprint */
-  .show-card {
+  /* Where to find us: stack show cards so both are fully visible */
+  .shows-grid-home.two-cards {
+    grid-template-columns: 1fr !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    gap: 14px !important;
+  }
+  .shows-teaser .show-card {
+    width: 100% !important;
+    min-width: 0 !important;
     padding: 24px 18px !important;
   }
   .show-card h3 { font-size: 0.96rem; margin-bottom: 6px; }
-  .show-meta { font-size: 0.66rem; margin-bottom: 10px; }
+  .show-meta { font-size: 0.66rem; margin-bottom: 10px; line-height: 1.45; }
   .show-card p { font-size: 0.8rem; line-height: 1.55; }
 
   /* Footer: logo full width, then 2x2 columns */

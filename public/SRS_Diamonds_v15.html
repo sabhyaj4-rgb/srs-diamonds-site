@@ -940,6 +940,22 @@ p {
   max-width: 860px;
   margin: 0 auto;
 }
+@media (max-width: 768px) {
+  .shows-grid-home.two-cards {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    width: 100%;
+    gap: 16px;
+  }
+  .shows-teaser .show-card {
+    width: 100%;
+    min-width: 0;
+  }
+  .shows-teaser .show-meta {
+    letter-spacing: 0.06em;
+    line-height: 1.45;
+  }
+}
 .show-card {
   border: 1px solid var(--grey-border);
   border-radius: 3px;
