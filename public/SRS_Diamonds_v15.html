@@ -939,6 +939,26 @@ p {
   grid-template-columns: repeat(2, minmax(280px, 1fr));
   max-width: 860px;
   margin: 0 auto;
+  align-items: stretch;
+}
+.shows-grid-home.two-cards .show-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.shows-grid-home.two-cards .show-card > p {
+  flex: 1 1 auto;
+  margin-bottom: 0;
+}
+.shows-grid-home.two-cards .show-booth-pill {
+  margin-top: 14px;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+@media (min-width: 769px) {
+  .shows-grid-home.two-cards .show-meta {
+    min-height: 2.6em;
+  }
 }
 @media (max-width: 768px) {
   .shows-grid-home.two-cards {
@@ -2514,7 +2534,8 @@ nav { height: var(--nav-h); }
           <span class="show-badge badge-exhibiting">Exhibiting</span>
           <h3><a href="https://www.vicenzaoro.com/en" target="_blank" rel="noopener" style="color:inherit; text-decoration:none;">Vicenza Oro ↗</a></h3>
           <div class="show-meta">4–8 September 2026 · Fiera di Vicenza, Italy</div>
-          <p>Find us at one of Europe's premier jewellery trade fairs. Booth details to follow.</p>
+          <p>Find us at one of Europe's premier jewellery trade fairs.</p>
+          <div class="show-booth-pill">Hall 3, Booth 127</div>
         </div>
       </div>
     </div>
@@ -2784,7 +2805,7 @@ nav { height: var(--nav-h); }
             <p>Europe's premier jewellery trade fair. SRS Diamonds will be exhibiting with a dedicated booth — a perfect opportunity to view our inventory and discuss your requirements.</p>
             <div class="booth-detail">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Booth details to be confirmed
+              Hall 3, Booth 127
             </div>
           </div>
         </div>
@@ -4027,7 +4048,7 @@ nav { height: var(--nav-h); }
           <li><a onclick="navigate('events')">2025 Events</a></li>
           <li><a onclick="navigate('news')">News &amp; Insights</a></li>
           <li><a onclick="navigate('events')">EPHJ Geneva · 16–19 June · Booth Q57</a></li>
-          <li><a onclick="navigate('events')">Vicenza Oro · 4–8 Sept</a></li>
+          <li><a onclick="navigate('events')">Vicenza Oro · 4–8 Sept · Hall 3, Booth 127</a></li>
           <li><a onclick="navigate('contact')">Get in Touch</a></li>
           <li><a href="mailto:info@srsdiamonds.com">info@srsdiamonds.com</a></li>
         </ul>
