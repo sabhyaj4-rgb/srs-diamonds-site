@@ -112,13 +112,55 @@ function normalizeWhitespace(text) {
   return (text || "").replace(/\s+/g, " ").trim();
 }
 
+// Common named HTML entities that appear in news feeds but aren't valid XML
+// entities (so the XML parser leaves them as literal text like "&nbsp;").
+const NAMED_ENTITIES = {
+  nbsp: " ",
+  amp: "&",
+  lt: "<",
+  gt: ">",
+  quot: '"',
+  apos: "'",
+  mdash: "\u2014",
+  ndash: "\u2013",
+  hellip: "\u2026",
+  lsquo: "\u2018",
+  rsquo: "\u2019",
+  ldquo: "\u201c",
+  rdquo: "\u201d",
+  laquo: "\u00ab",
+  raquo: "\u00bb",
+  reg: "\u00ae",
+  copy: "\u00a9",
+  trade: "\u2122",
+  deg: "\u00b0",
+  middot: "\u00b7",
+};
+
 function decodeBasicEntities(text) {
-  return text
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'");
+  let out = String(text || "")
+    .replace(/&#(\d+);/g, (_, n) => safeFromCodePoint(parseInt(n, 10)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, n) => safeFromCodePoint(parseInt(n, 16)));
+  // Two passes catch double-encoded sequences such as "&amp;nbsp;".
+  for (let pass = 0; pass < 2; pass += 1) {
+    out = out.replace(/&([a-zA-Z][a-zA-Z0-9]*);/g, (match, name) => {
+      const key = name.toLowerCase();
+      return Object.prototype.hasOwnProperty.call(NAMED_ENTITIES, key)
+        ? NAMED_ENTITIES[key]
+        : match;
+    });
+  }
+  // Normalise any literal non-breaking space characters to plain spaces.
+  return out.replace(/\u00a0/g, " ");
+}
+
+function safeFromCodePoint(code) {
+  if (!Number.isFinite(code) || code < 0 || code > 0x10ffff) return "";
+  try {
+    return String.fromCodePoint(code);
+  } catch {
+    return "";
+  }
 }
 
 function escapeHtml(text) {
