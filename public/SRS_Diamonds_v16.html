@@ -4952,8 +4952,8 @@ function closeMobileSubmenus() {
 // Our custom switcher is the visible control; GTranslate (loaded near
 // the end of <body>, its own widget hidden via CSS) does the actual
 // translating. Selecting a language sets the `googtrans` cookie that
-// GTranslate reads, then translates in place via the Google combo —
-// falling back to a reload if the engine hasn't loaded yet.
+// GTranslate reads on load, then reloads so the engine applies (or
+// removes) the translation reliably in both directions.
 // ═══════════════════════════════════════════
 const SUPPORTED_LANGS = ['en', 'fr', 'it', 'es', 'nl', 'ar'];
 
@@ -4978,14 +4978,6 @@ function setGoogTransCookie(code) {
   }
 }
 
-function translateInPlace(code) {
-  const combo = document.querySelector('select.goog-te-combo');
-  if (!combo) return false;
-  combo.value = code === 'en' ? '' : code;
-  combo.dispatchEvent(new Event('change'));
-  return true;
-}
-
 function updateSwitcherLabel(code) {
   const label = document.querySelector('[data-lang-label]');
   if (label) label.textContent = code.toUpperCase();
@@ -4996,12 +4988,20 @@ function updateSwitcherLabel(code) {
 
 function setLanguage(code) {
   if (!SUPPORTED_LANGS.includes(code)) code = 'en';
+  // No-op if we're already on the requested language.
+  if (code === getActiveLang()) {
+    closeMenu();
+    return;
+  }
+  // Set the googtrans cookie then reload. Google Translate applies the
+  // cookie on load in both directions — translating to a language AND
+  // restoring the original English — which the in-place combo cannot do
+  // reliably (selecting English a second time used to leave the page
+  // stuck in the previous language).
   setGoogTransCookie(code);
   updateSwitcherLabel(code);
   closeMenu();
-  if (!translateInPlace(code)) {
-    location.reload();
-  }
+  location.reload();
 }
 
 (function initLanguage() {
