@@ -4963,17 +4963,33 @@ function getActiveLang() {
   return 'en';
 }
 
-function setGoogTransCookie(code) {
+// Every domain scope GTranslate/Google may store the cookie on: host-only
+// plus each parent domain (e.g. ".srsdiamonds.com") with a leading dot.
+// Clearing/setting across all of them keeps the scopes from disagreeing,
+// which is what left a stale ".../fr" cookie behind when reverting to English.
+function googtransDomains() {
   const host = location.hostname;
+  const list = [''];
+  const parts = host.split('.');
+  for (let i = 0; i < parts.length - 1; i++) {
+    list.push('.' + parts.slice(i).join('.'));
+  }
+  return list;
+}
+
+function setGoogTransCookie(code) {
   const past = 'Thu, 01 Jan 1970 00:00:00 UTC';
-  // Clear any existing value across the paths/domains GTranslate may use.
-  ['', ';domain=' + host, ';domain=.' + host].forEach(scope => {
-    document.cookie = 'googtrans=;expires=' + past + ';path=/' + scope;
+  const scopes = googtransDomains();
+  // Clear any existing value across every domain scope first.
+  scopes.forEach(d => {
+    const dom = d ? ';domain=' + d : '';
+    document.cookie = 'googtrans=;expires=' + past + ';path=/' + dom;
   });
   if (code !== 'en') {
     const val = '/en/' + code;
-    ['', ';domain=' + host, ';domain=.' + host].forEach(scope => {
-      document.cookie = 'googtrans=' + val + ';path=/' + scope;
+    scopes.forEach(d => {
+      const dom = d ? ';domain=' + d : '';
+      document.cookie = 'googtrans=' + val + ';path=/' + dom;
     });
   }
 }
