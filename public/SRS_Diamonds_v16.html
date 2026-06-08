@@ -4949,24 +4949,23 @@ function closeMobileSubmenus() {
 
 // ═══════════════════════════════════════════
 // LANGUAGE SWITCHER (drives GTranslate)
-// Our custom switcher is the visible control; GTranslate (loaded near
-// the end of <body>, its own widget hidden via CSS) does the actual
-// translating. Selecting a language sets the `googtrans` cookie that
-// GTranslate reads on load, then reloads so the engine applies (or
-// removes) the translation reliably in both directions.
+// Our custom switcher is the visible control; GTranslate (loaded near the
+// end of <body>, its own widget hidden via CSS) does the actual translating.
+//
+// Behaviour:
+//  • Every fresh load / refresh starts in English — we clear the googtrans
+//    cookie before GTranslate initialises so it never auto-translates.
+//  • Picking a language translates the page in place (no reload), so the
+//    choice persists as the visitor navigates within the single-page site.
+//  • Picking English reloads, which (because we clear the cookie on load)
+//    cleanly restores the original English page.
+//  • The top-right label always reflects the language actually shown.
 // ═══════════════════════════════════════════
 const SUPPORTED_LANGS = ['en', 'fr', 'it', 'es', 'nl', 'ar'];
 
-function getActiveLang() {
-  const m = document.cookie.match(/(?:^|;\s*)googtrans=\/[^/]+\/([^;]+)/);
-  if (m && SUPPORTED_LANGS.includes(m[1])) return m[1];
-  return 'en';
-}
-
 // Every domain scope GTranslate/Google may store the cookie on: host-only
 // plus each parent domain (e.g. ".srsdiamonds.com") with a leading dot.
-// Clearing/setting across all of them keeps the scopes from disagreeing,
-// which is what left a stale ".../fr" cookie behind when reverting to English.
+// Clearing across all of them prevents a stale ".../fr" cookie from lingering.
 function googtransDomains() {
   const host = location.hostname;
   const list = [''];
@@ -4977,21 +4976,12 @@ function googtransDomains() {
   return list;
 }
 
-function setGoogTransCookie(code) {
+function clearGoogTransCookie() {
   const past = 'Thu, 01 Jan 1970 00:00:00 UTC';
-  const scopes = googtransDomains();
-  // Clear any existing value across every domain scope first.
-  scopes.forEach(d => {
+  googtransDomains().forEach(d => {
     const dom = d ? ';domain=' + d : '';
     document.cookie = 'googtrans=;expires=' + past + ';path=/' + dom;
   });
-  if (code !== 'en') {
-    const val = '/en/' + code;
-    scopes.forEach(d => {
-      const dom = d ? ';domain=' + d : '';
-      document.cookie = 'googtrans=' + val + ';path=/' + dom;
-    });
-  }
 }
 
 function updateSwitcherLabel(code) {
@@ -5002,26 +4992,43 @@ function updateSwitcherLabel(code) {
   });
 }
 
+// Translate the live DOM via Google's hidden combo. Returns false if the
+// engine hasn't loaded yet so the caller can retry.
+function translateInPlace(code) {
+  const combo = document.querySelector('select.goog-te-combo');
+  if (!combo) return false;
+  combo.value = code;
+  combo.dispatchEvent(new Event('change'));
+  return true;
+}
+
 function setLanguage(code) {
   if (!SUPPORTED_LANGS.includes(code)) code = 'en';
-  // No-op if we're already on the requested language.
-  if (code === getActiveLang()) {
-    closeMenu();
+  closeMenu();
+
+  if (code === 'en') {
+    // Back to the original: clear translation state and reload. On load we
+    // always start English, so this restores the page cleanly.
+    clearGoogTransCookie();
+    updateSwitcherLabel('en');
+    location.reload();
     return;
   }
-  // Set the googtrans cookie then reload. Google Translate applies the
-  // cookie on load in both directions — translating to a language AND
-  // restoring the original English — which the in-place combo cannot do
-  // reliably (selecting English a second time used to leave the page
-  // stuck in the previous language).
-  setGoogTransCookie(code);
+
   updateSwitcherLabel(code);
-  closeMenu();
-  location.reload();
+  // Apply immediately; if GTranslate isn't ready yet, retry briefly.
+  if (!translateInPlace(code)) {
+    let tries = 0;
+    const timer = setInterval(() => {
+      if (translateInPlace(code) || ++tries > 50) clearInterval(timer);
+    }, 100);
+  }
 }
 
 (function initLanguage() {
-  updateSwitcherLabel(getActiveLang());
+  // First load / refresh always begins in English.
+  clearGoogTransCookie();
+  updateSwitcherLabel('en');
 })();
 
 function toggleMobileSubmenu(menuKey) {
