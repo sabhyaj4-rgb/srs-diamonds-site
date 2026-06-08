@@ -2358,6 +2358,16 @@ nav { height: var(--nav-h); }
   color: var(--gold-dark);
 }
 
+/* Hide GTranslate's own widget (we drive it from our switcher) and Google's translate bar */
+.gtranslate_wrapper { display: none !important; }
+.goog-te-banner-frame,
+.goog-te-gadget-icon,
+#goog-gt-tt,
+.goog-te-balloon-frame { display: none !important; }
+.skiptranslate { display: none !important; }
+body { top: 0 !important; }
+.goog-text-highlight { background: none !important; box-shadow: none !important; }
+
 @media (max-width: 480px) {
   .hero h1 { white-space: normal; font-size: clamp(1.68rem, 8.4vw, 2.28rem); }
 }
@@ -2952,9 +2962,10 @@ nav { height: var(--nav-h); }
         <div class="dropdown-menu lang-menu">
           <a onclick="setLanguage('en')" data-lang="en">English</a>
           <a onclick="setLanguage('fr')" data-lang="fr">Français</a>
-          <a onclick="setLanguage('de')" data-lang="de">Deutsch</a>
           <a onclick="setLanguage('it')" data-lang="it">Italiano</a>
           <a onclick="setLanguage('es')" data-lang="es">Español</a>
+          <a onclick="setLanguage('nl')" data-lang="nl">Nederlands</a>
+          <a onclick="setLanguage('ar')" data-lang="ar">العربية</a>
         </div>
       </li>
     </ul>
@@ -3019,9 +3030,10 @@ nav { height: var(--nav-h); }
     <div class="mobile-lang">
       <button type="button" onclick="setLanguage('en')" data-lang="en">EN</button>
       <button type="button" onclick="setLanguage('fr')" data-lang="fr">FR</button>
-      <button type="button" onclick="setLanguage('de')" data-lang="de">DE</button>
       <button type="button" onclick="setLanguage('it')" data-lang="it">IT</button>
       <button type="button" onclick="setLanguage('es')" data-lang="es">ES</button>
+      <button type="button" onclick="setLanguage('nl')" data-lang="nl">NL</button>
+      <button type="button" onclick="setLanguage('ar')" data-lang="ar">AR</button>
     </div>
   </div>
 </div>
@@ -4526,6 +4538,7 @@ nav { height: var(--nav-h); }
             <li style="font-size:0.92rem; color:#5C5955;">Your message and stated requirements</li>
           </ul>
           <p style="color:#5C5955; margin-top:16px;">We use privacy-friendly, cookieless analytics (Vercel Web Analytics) to understand overall website traffic — such as page views, approximate location by country, and device type. This data is aggregated and anonymous: it does not use cookies, does not track you across other websites, and cannot be used to identify you personally. We do not use advertising trackers.</p>
+          <p style="color:#5C5955; margin-top:16px;">If you choose to view this website in another language, we use a third-party translation service (GTranslate, which relies on Google Translate). This is only activated when you select a language and stores a small cookie to remember your choice. Translating the page may send the page content to that service to generate the translation. We do not use it to identify or track you.</p>
         </div>
 
         <div class="reveal" style="margin-bottom:48px;">
@@ -4935,39 +4948,64 @@ function closeMobileSubmenus() {
 }
 
 // ═══════════════════════════════════════════
-// LANGUAGE SWITCHER (UI placeholder)
-// The visible switcher and the saved-preference logic live here.
-// The actual page-translation engine is NOT connected yet — when one
-// is chosen (a translation service or translated page builds), wire it
-// into applyLanguage() at the marked hook below using the `code` value.
+// LANGUAGE SWITCHER (drives GTranslate)
+// Our custom switcher is the visible control; GTranslate (loaded near
+// the end of <body>, its own widget hidden via CSS) does the actual
+// translating. Selecting a language sets the `googtrans` cookie that
+// GTranslate reads, then translates in place via the Google combo —
+// falling back to a reload if the engine hasn't loaded yet.
 // ═══════════════════════════════════════════
-const SUPPORTED_LANGS = ['en', 'fr', 'de', 'it', 'es'];
+const SUPPORTED_LANGS = ['en', 'fr', 'it', 'es', 'nl', 'ar'];
 
-function setLanguage(code) {
-  if (!SUPPORTED_LANGS.includes(code)) code = 'en';
-  try { localStorage.setItem('srs-lang', code); } catch (e) {}
-  applyLanguage(code);
-  closeMenu();
+function getActiveLang() {
+  const m = document.cookie.match(/(?:^|;\s*)googtrans=\/[^/]+\/([^;]+)/);
+  if (m && SUPPORTED_LANGS.includes(m[1])) return m[1];
+  return 'en';
 }
 
-function applyLanguage(code) {
+function setGoogTransCookie(code) {
+  const host = location.hostname;
+  const past = 'Thu, 01 Jan 1970 00:00:00 UTC';
+  // Clear any existing value across the paths/domains GTranslate may use.
+  ['', ';domain=' + host, ';domain=.' + host].forEach(scope => {
+    document.cookie = 'googtrans=;expires=' + past + ';path=/' + scope;
+  });
+  if (code !== 'en') {
+    const val = '/en/' + code;
+    ['', ';domain=' + host, ';domain=.' + host].forEach(scope => {
+      document.cookie = 'googtrans=' + val + ';path=/' + scope;
+    });
+  }
+}
+
+function translateInPlace(code) {
+  const combo = document.querySelector('select.goog-te-combo');
+  if (!combo) return false;
+  combo.value = code === 'en' ? '' : code;
+  combo.dispatchEvent(new Event('change'));
+  return true;
+}
+
+function updateSwitcherLabel(code) {
   const label = document.querySelector('[data-lang-label]');
   if (label) label.textContent = code.toUpperCase();
   document.querySelectorAll('[data-lang]').forEach(el => {
     el.classList.toggle('lang-active', el.getAttribute('data-lang') === code);
   });
+}
 
-  // ── TRANSLATION ENGINE HOOK ───────────────────────────────────
-  // No translation engine is connected yet, so this currently only
-  // updates the switcher's visible state. Trigger the chosen engine
-  // here using `code` once it is set up.
-  // ──────────────────────────────────────────────────────────────
+function setLanguage(code) {
+  if (!SUPPORTED_LANGS.includes(code)) code = 'en';
+  setGoogTransCookie(code);
+  updateSwitcherLabel(code);
+  closeMenu();
+  if (!translateInPlace(code)) {
+    location.reload();
+  }
 }
 
 (function initLanguage() {
-  let saved = 'en';
-  try { saved = localStorage.getItem('srs-lang') || 'en'; } catch (e) {}
-  applyLanguage(SUPPORTED_LANGS.includes(saved) ? saved : 'en');
+  updateSwitcherLabel(getActiveLang());
 })();
 
 function toggleMobileSubmenu(menuKey) {
@@ -5323,5 +5361,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 </script>
+
+<!-- GTranslate engine (its own widget is hidden via CSS; driven by our custom switcher) -->
+<div class="gtranslate_wrapper"></div>
+<script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"languages":["en","fr","it","es","nl","ar"],"wrapper_selector":".gtranslate_wrapper","select_language_label":"EN"}</script>
+<script src="https://cdn.gtranslate.net/widgets/latest/dropdown.js" defer></script>
 </body>
 </html>
