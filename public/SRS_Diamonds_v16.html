@@ -2294,6 +2294,80 @@ nav { height: var(--nav-h); }
   margin: 6px 0;
 }
 
+/* Language switcher — visible UI only; translation engine connects via setLanguage() in JS */
+.lang-switch .lang-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+}
+.lang-switch .lang-globe {
+  width: 14px;
+  height: 14px;
+  display: block;
+  flex-shrink: 0;
+}
+.lang-switch .dropdown-menu {
+  left: auto;
+  right: 0;
+  min-width: 152px;
+  transform: translateY(-6px);
+}
+.nav-dropdown.lang-switch:hover .dropdown-menu,
+.nav-dropdown.lang-switch:focus-within .dropdown-menu {
+  transform: translateY(0);
+}
+.lang-switch .dropdown-menu::before {
+  left: auto;
+  right: 20px;
+  transform: rotate(45deg);
+}
+.lang-switch .dropdown-menu a.lang-active {
+  color: var(--gold-dark);
+  background: var(--cream);
+}
+.mobile-lang-label {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--grey-mid);
+  margin-top: 18px;
+  margin-bottom: 8px;
+}
+.mobile-lang {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.mobile-lang button {
+  background: none;
+  border: 1px solid var(--grey-border);
+  border-radius: 4px;
+  padding: 9px 16px;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--navy);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.mobile-lang button.lang-active,
+.mobile-lang button:hover {
+  border-color: var(--gold);
+  color: var(--gold-dark);
+}
+
+/* Hide GTranslate's own widget (we drive it from our switcher) and Google's translate bar */
+.gtranslate_wrapper { display: none !important; }
+.goog-te-banner-frame,
+.goog-te-gadget-icon,
+#goog-gt-tt,
+.goog-te-balloon-frame { display: none !important; }
+.skiptranslate { display: none !important; }
+body { top: 0 !important; }
+.goog-text-highlight { background: none !important; box-shadow: none !important; }
+
 @media (max-width: 480px) {
   .hero h1 { white-space: normal; font-size: clamp(1.68rem, 8.4vw, 2.28rem); }
 }
@@ -2883,6 +2957,17 @@ nav { height: var(--nav-h); }
       </li>
       <li><a onclick="navigate('faq')" data-page="faq">FAQ</a></li>
       <li><a onclick="navigate('contact')" data-page="contact" class="nav-cta-btn">Contact</a></li>
+      <li class="nav-dropdown lang-switch">
+        <a class="lang-current" role="button" tabindex="0" aria-haspopup="true" aria-label="Select language"><svg class="lang-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg><span data-lang-label>EN</span></a>
+        <div class="dropdown-menu lang-menu">
+          <a onclick="setLanguage('en')" data-lang="en">English</a>
+          <a onclick="setLanguage('fr')" data-lang="fr">Français</a>
+          <a onclick="setLanguage('it')" data-lang="it">Italiano</a>
+          <a onclick="setLanguage('es')" data-lang="es">Español</a>
+          <a onclick="setLanguage('nl')" data-lang="nl">Nederlands</a>
+          <a onclick="setLanguage('ar')" data-lang="ar">العربية</a>
+        </div>
+      </li>
     </ul>
     <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -2940,6 +3025,16 @@ nav { height: var(--nav-h); }
 
     <a class="mobile-link" onclick="navigate('faq'); closeMenu()">FAQ</a>
     <a class="mobile-link" onclick="navigate('contact'); closeMenu()">Contact</a>
+
+    <div class="mobile-lang-label">Language</div>
+    <div class="mobile-lang">
+      <button type="button" onclick="setLanguage('en')" data-lang="en">EN</button>
+      <button type="button" onclick="setLanguage('fr')" data-lang="fr">FR</button>
+      <button type="button" onclick="setLanguage('it')" data-lang="it">IT</button>
+      <button type="button" onclick="setLanguage('es')" data-lang="es">ES</button>
+      <button type="button" onclick="setLanguage('nl')" data-lang="nl">NL</button>
+      <button type="button" onclick="setLanguage('ar')" data-lang="ar">AR</button>
+    </div>
   </div>
 </div>
 
@@ -4443,6 +4538,7 @@ nav { height: var(--nav-h); }
             <li style="font-size:0.92rem; color:#5C5955;">Your message and stated requirements</li>
           </ul>
           <p style="color:#5C5955; margin-top:16px;">We use privacy-friendly, cookieless analytics (Vercel Web Analytics) to understand overall website traffic — such as page views, approximate location by country, and device type. This data is aggregated and anonymous: it does not use cookies, does not track you across other websites, and cannot be used to identify you personally. We do not use advertising trackers.</p>
+          <p style="color:#5C5955; margin-top:16px;">If you choose to view this website in another language, we use a third-party translation service (GTranslate, which relies on Google Translate). This is only activated when you select a language and stores a small cookie to remember your choice. Translating the page may send the page content to that service to generate the translation. We do not use it to identify or track you.</p>
         </div>
 
         <div class="reveal" style="margin-bottom:48px;">
@@ -4851,6 +4947,67 @@ function closeMobileSubmenus() {
   });
 }
 
+// ═══════════════════════════════════════════
+// LANGUAGE SWITCHER (drives GTranslate)
+// Our custom switcher is the visible control; GTranslate (loaded near
+// the end of <body>, its own widget hidden via CSS) does the actual
+// translating. Selecting a language sets the `googtrans` cookie that
+// GTranslate reads, then translates in place via the Google combo —
+// falling back to a reload if the engine hasn't loaded yet.
+// ═══════════════════════════════════════════
+const SUPPORTED_LANGS = ['en', 'fr', 'it', 'es', 'nl', 'ar'];
+
+function getActiveLang() {
+  const m = document.cookie.match(/(?:^|;\s*)googtrans=\/[^/]+\/([^;]+)/);
+  if (m && SUPPORTED_LANGS.includes(m[1])) return m[1];
+  return 'en';
+}
+
+function setGoogTransCookie(code) {
+  const host = location.hostname;
+  const past = 'Thu, 01 Jan 1970 00:00:00 UTC';
+  // Clear any existing value across the paths/domains GTranslate may use.
+  ['', ';domain=' + host, ';domain=.' + host].forEach(scope => {
+    document.cookie = 'googtrans=;expires=' + past + ';path=/' + scope;
+  });
+  if (code !== 'en') {
+    const val = '/en/' + code;
+    ['', ';domain=' + host, ';domain=.' + host].forEach(scope => {
+      document.cookie = 'googtrans=' + val + ';path=/' + scope;
+    });
+  }
+}
+
+function translateInPlace(code) {
+  const combo = document.querySelector('select.goog-te-combo');
+  if (!combo) return false;
+  combo.value = code === 'en' ? '' : code;
+  combo.dispatchEvent(new Event('change'));
+  return true;
+}
+
+function updateSwitcherLabel(code) {
+  const label = document.querySelector('[data-lang-label]');
+  if (label) label.textContent = code.toUpperCase();
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    el.classList.toggle('lang-active', el.getAttribute('data-lang') === code);
+  });
+}
+
+function setLanguage(code) {
+  if (!SUPPORTED_LANGS.includes(code)) code = 'en';
+  setGoogTransCookie(code);
+  updateSwitcherLabel(code);
+  closeMenu();
+  if (!translateInPlace(code)) {
+    location.reload();
+  }
+}
+
+(function initLanguage() {
+  updateSwitcherLabel(getActiveLang());
+})();
+
 function toggleMobileSubmenu(menuKey) {
   const target = document.querySelector(`.mobile-item.has-children[data-menu="${menuKey}"]`);
   if (!target) return;
@@ -5204,5 +5361,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 </script>
+
+<!-- GTranslate engine (its own widget is hidden via CSS; driven by our custom switcher) -->
+<div class="gtranslate_wrapper"></div>
+<script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"languages":["en","fr","it","es","nl","ar"],"wrapper_selector":".gtranslate_wrapper","select_language_label":"EN"}</script>
+<script src="https://cdn.gtranslate.net/widgets/latest/dropdown.js" defer></script>
 </body>
 </html>
