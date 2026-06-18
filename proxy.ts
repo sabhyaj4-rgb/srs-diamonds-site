@@ -4,8 +4,9 @@ import type { NextRequest } from "next/server";
 // Toggle this flag when you want to show maintenance mode.
 const MAINTENANCE_MODE = false;
 
-const LIVE_PAGE_PATH = "/SRS_Diamonds_v16.html";
 const MAINTENANCE_PAGE_PATH = "/maintenance.html";
+// Old monolithic single-file site(s); now superseded by real routes.
+const LEGACY_PAGE_PATHS = ["/SRS_Diamonds_v16.html", "/SRS_Diamonds_v15.html"];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -19,21 +20,25 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Keep the public URL clean: serve the site from root "/".
-  if (pathname === "/") {
-    const target = MAINTENANCE_MODE ? MAINTENANCE_PAGE_PATH : LIVE_PAGE_PATH;
-    return NextResponse.rewrite(new URL(target, request.url));
+  // Maintenance mode: send every page to the maintenance notice.
+  if (MAINTENANCE_MODE) {
+    if (pathname !== MAINTENANCE_PAGE_PATH) {
+      return NextResponse.rewrite(new URL(MAINTENANCE_PAGE_PATH, request.url));
+    }
+    return NextResponse.next();
   }
 
-  // Prevent exposing internal page paths in normal browsing.
-  if (!MAINTENANCE_MODE && pathname === MAINTENANCE_PAGE_PATH) {
+  // Don't expose the maintenance page during normal operation.
+  if (pathname === MAINTENANCE_PAGE_PATH) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (MAINTENANCE_MODE && pathname === LIVE_PAGE_PATH) {
+  // Redirect the retired single-file pages to the new home route.
+  if (LEGACY_PAGE_PATHS.includes(pathname)) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
+  // Everything else is handled by Next.js routing.
   return NextResponse.next();
 }
 
