@@ -3,7 +3,8 @@ import path from "node:path";
 import { XMLParser } from "fast-xml-parser";
 
 const PROJECT_ROOT = process.cwd();
-const HTML_PATH = path.join(PROJECT_ROOT, "public", "SRS_Diamonds_v16.html");
+// News grid now lives in the multi-page /news route's HTML fragment.
+const HTML_PATH = path.join(PROJECT_ROOT, "app", "_content", "news.html");
 const START_MARKER = "<!-- NEWS_GRID_START (auto-managed by scripts/update-news.mjs) -->";
 const END_MARKER = "<!-- NEWS_GRID_END -->";
 
