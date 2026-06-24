@@ -13,10 +13,6 @@ export const metadata: Metadata = {
   },
   description:
     "Family-run Antwerp diamond house since 2012. Natural, polished diamonds at one uncompromising standard. From calibrated parcels to GIA certified stones. Purpose in Every Stone.",
-  icons: {
-    icon: "/favicon.png?v=4",
-    apple: "/apple-touch-icon.png?v=1",
-  },
 };
 
 // Runs before GTranslate loads: keeps the site in English on a fresh visit or
@@ -55,6 +51,9 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400&display=swap"
           rel="stylesheet"
         />
+        {/* Company logo in every browser tab — explicit so it survives client-side navigation */}
+        <link rel="icon" href="/favicon.png" type="image/png" sizes="512x512" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <Script id="srs-lang-early" strategy="beforeInteractive">
           {LANG_EARLY}
         </Script>
