@@ -61,6 +61,15 @@ export const PAGES: Record<string, PageSeo> = {
     changeFrequency: "monthly",
     priority: 0.6,
   },
+  "sustainability-compliance": {
+    slug: "sustainability",
+    path: "/sustainability-compliance",
+    title: "Sustainability & Compliance",
+    description:
+      "SRS Diamonds' public RJC policies, supply chain due diligence report and compliance disclosures for sustainability and responsible jewellery practices.",
+    changeFrequency: "yearly",
+    priority: 0.7,
+  },
   "our-diamonds": {
     slug: "diamonds",
     path: "/our-diamonds",

@@ -11,6 +11,7 @@
 // Map internal page keys / shape ids to the new public URLs.
 var PAGE_URLS = {
   home: '/', about: '/our-story', team: '/our-team', csr: '/responsibility',
+  sustainability: '/sustainability-compliance',
   diamonds: '/our-diamonds', process: '/process', guide: '/diamond-guide',
   events: '/exhibitions', news: '/news', faq: '/faq', contact: '/contact',
   privacy: '/privacy', terms: '/terms'
