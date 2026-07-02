@@ -381,12 +381,177 @@ function initAnimations() {
 }
 
 // ═══════════════════════════════════════════
-// NAV SCROLL SHADOW
+// NAV — scroll shadow + adaptive frosted tint (Apple-style)
 // ═══════════════════════════════════════════
-window.addEventListener('scroll', () => {
-  const nav = document.getElementById('mainNav');
-  if (nav) nav.classList.toggle('scrolled', window.scrollY > 20);
-}, { passive: true });
+(function initAdaptiveNav() {
+  var nav = document.getElementById('mainNav');
+  if (!nav) return;
+
+  if (!nav.querySelector('.nav-backdrop')) {
+    var inner = nav.querySelector('.nav-inner');
+    var backdrop = document.createElement('div');
+    backdrop.className = 'nav-backdrop';
+    backdrop.setAttribute('aria-hidden', 'true');
+    if (inner) nav.insertBefore(backdrop, inner);
+    else nav.appendChild(backdrop);
+  }
+
+  var NAV_TINT_CLASSES = {
+    hero: [15, 21, 32],
+    'page-hero': [245, 241, 235],
+    'section-blend-cream': [253, 252, 250],
+    'section-blend-navy': [22, 26, 44],
+    'shapes-section': [250, 249, 247],
+    'shape-card': [255, 255, 255],
+    proposition: [255, 255, 255],
+    'trust-strip': [22, 26, 44],
+    statement: [22, 26, 44],
+    'visual-block': [22, 26, 44],
+    'shape-hero-section': [22, 26, 44],
+    'contact-card': [22, 26, 44],
+    footer: [240, 237, 230]
+  };
+
+  var NAV_ALPHA_REST = 0.97;
+  var NAV_ALPHA_SCROLL = 1;
+  var NAV_BLUR_REST = '0px';
+  var NAV_BLUR_SCROLL = '20px';
+  var NAV_MIN = 236;
+  var BASE_TINT = { r: 255, g: 255, b: 255 };
+
+  var current = { r: 255, g: 255, b: 255 };
+  var target = { r: 255, g: 255, b: 255 };
+  var rafId = null;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function parseRgb(str) {
+    if (!str) return null;
+    var m = str.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+    if (!m) return null;
+    return { r: +m[1], g: +m[2], b: +m[3] };
+  }
+
+  function luminance(rgb) {
+    return 0.2126 * rgb.r + 0.7152 * rgb.g + 0.0722 * rgb.b;
+  }
+
+  function tintFromClasses(el) {
+    while (el && el !== document.documentElement) {
+      if (el.classList) {
+        for (var cls in NAV_TINT_CLASSES) {
+          if (el.classList.contains(cls)) {
+            var c = NAV_TINT_CLASSES[cls];
+            return { r: c[0], g: c[1], b: c[2] };
+          }
+        }
+      }
+      var attr = el.getAttribute && el.getAttribute('data-nav-tint');
+      if (attr) {
+        var parsed = parseRgb(attr);
+        if (parsed) return parsed;
+      }
+      el = el.parentElement;
+    }
+    return null;
+  }
+
+  function tintFromComputed(el) {
+    while (el && el !== document.documentElement) {
+      var fromClass = tintFromClasses(el);
+      if (fromClass) return fromClass;
+      var bg = getComputedStyle(el).backgroundColor;
+      var parsed = parseRgb(bg);
+      if (parsed) {
+        var alphaMatch = bg.match(/rgba\([^)]+,\s*([\d.]+)\s*\)/);
+        if (!alphaMatch || parseFloat(alphaMatch[1]) > 0.05) return parsed;
+      }
+      el = el.parentElement;
+    }
+    return { r: 255, g: 255, b: 255 };
+  }
+
+  function sampleBehindNav() {
+    var h = nav.offsetHeight || 76;
+    var y = Math.max(1, Math.floor(h * 0.55));
+    var w = window.innerWidth;
+    var xs = [w * 0.12, w * 0.32, w * 0.5, w * 0.68, w * 0.88];
+    var r = 0, g = 0, b = 0, n = 0;
+    var prevPointer = nav.style.pointerEvents;
+    nav.style.pointerEvents = 'none';
+    for (var i = 0; i < xs.length; i++) {
+      var el = document.elementFromPoint(Math.floor(xs[i]), y);
+      if (!el || nav.contains(el)) continue;
+      var c = tintFromComputed(el);
+      r += c.r; g += c.g; b += c.b; n++;
+    }
+    nav.style.pointerEvents = prevPointer;
+    if (!n) return { r: 255, g: 255, b: 255 };
+    return { r: Math.round(r / n), g: Math.round(g / n), b: Math.round(b / n) };
+  }
+
+  function applyTint(rgb, scrolling) {
+    nav.style.setProperty('--nav-tint-r', String(rgb.r));
+    nav.style.setProperty('--nav-tint-g', String(rgb.g));
+    nav.style.setProperty('--nav-tint-b', String(rgb.b));
+    nav.style.setProperty('--nav-tint-a', String(scrolling ? NAV_ALPHA_SCROLL : NAV_ALPHA_REST));
+    nav.style.setProperty('--nav-blur', scrolling ? NAV_BLUR_SCROLL : NAV_BLUR_REST);
+    nav.classList.toggle('nav-adaptive', scrolling);
+  }
+
+  function frostedFromSample(sample) {
+    var lum = luminance(sample);
+    var hint = lum < 90 ? 0.17 : lum < 140 ? 0.21 : lum < 200 ? 0.25 : 0.29;
+    return {
+      r: Math.max(NAV_MIN, Math.round(255 * (1 - hint) + sample.r * hint)),
+      g: Math.max(NAV_MIN, Math.round(255 * (1 - hint) + sample.g * hint)),
+      b: Math.max(NAV_MIN, Math.round(255 * (1 - hint) + sample.b * hint))
+    };
+  }
+
+  function tick() {
+    var ease = reduceMotion ? 1 : 0.1;
+    current.r += (target.r - current.r) * ease;
+    current.g += (target.g - current.g) * ease;
+    current.b += (target.b - current.b) * ease;
+    applyTint(frostedFromSample({
+      r: Math.round(current.r),
+      g: Math.round(current.g),
+      b: Math.round(current.b)
+    }), true);
+    var settled = Math.abs(current.r - target.r) < 0.5 &&
+      Math.abs(current.g - target.g) < 0.5 &&
+      Math.abs(current.b - target.b) < 0.5;
+    if (!settled && !reduceMotion) rafId = requestAnimationFrame(tick);
+    else rafId = null;
+  }
+
+  function updateNavTint() {
+    var atRest = window.scrollY <= 20;
+    nav.classList.toggle('scrolled', !atRest);
+    if (atRest) {
+      target = BASE_TINT;
+      current = BASE_TINT;
+      applyTint(BASE_TINT, false);
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+      return;
+    }
+    target = sampleBehindNav();
+    if (reduceMotion) {
+      current = { r: target.r, g: target.g, b: target.b };
+      applyTint(frostedFromSample(target), true);
+      return;
+    }
+    if (!rafId) rafId = requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('scroll', updateNavTint, { passive: true });
+  window.addEventListener('resize', updateNavTint, { passive: true });
+  window.addEventListener('load', updateNavTint);
+  updateNavTint();
+})();
 
 // ═══════════════════════════════════════════
 // PARALLAX — Hero background elements (home only)
