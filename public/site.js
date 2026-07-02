@@ -475,7 +475,7 @@ function scrollToHomeNextSection() {
   requestAnimationFrame(step);
 }
 
-const CONTACT_FORM_ENDPOINT = 'https://formspree.io/f/mykbqlde';
+const CONTACT_FORM_ENDPOINT = '/api/contact';
 
 async function validateForm(e) {
   e.preventDefault();
@@ -524,12 +524,24 @@ async function validateForm(e) {
   if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending...'; }
 
   try {
+    const gotcha = document.querySelector('#contactForm input[name="_gotcha"]');
     const res = await fetch(CONTACT_FORM_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ name, company, email, phone, country, message, interests, shapes: shapeSel }),
+      body: JSON.stringify({
+        name, company, email, phone, country, message,
+        interests, shapes: shapeSel,
+        _gotcha: gotcha ? gotcha.value : '',
+      }),
     });
-    if (!res.ok) throw new Error('Failed to submit enquiry');
+    if (!res.ok) {
+      let detail = 'Failed to submit enquiry';
+      try {
+        const data = await res.json();
+        if (data?.error) detail = data.error;
+      } catch (_) {}
+      throw new Error(detail);
+    }
     if (successEl) successEl.style.display = 'block';
     const formEl = document.getElementById('contactForm');
     if (formEl) formEl.reset();
