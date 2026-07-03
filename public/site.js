@@ -489,6 +489,14 @@ function initAnimations() {
     return { r: Math.round(r / n), g: Math.round(g / n), b: Math.round(b / n) };
   }
 
+  function scrollTop() {
+    return Math.max(0, window.scrollY || document.documentElement.scrollTop || 0);
+  }
+
+  function isAtPageTop() {
+    return scrollTop() <= 20;
+  }
+
   function applyTint(rgb, scrolling) {
     nav.style.setProperty('--nav-tint-r', String(rgb.r));
     nav.style.setProperty('--nav-tint-g', String(rgb.g));
@@ -496,6 +504,7 @@ function initAnimations() {
     nav.style.setProperty('--nav-tint-a', String(scrolling ? NAV_ALPHA_SCROLL : NAV_ALPHA_REST));
     nav.style.setProperty('--nav-blur', scrolling ? NAV_BLUR_SCROLL : NAV_BLUR_REST);
     nav.classList.toggle('nav-adaptive', scrolling);
+    nav.classList.toggle('nav-at-top', !scrolling);
   }
 
   function frostedFromSample(sample) {
@@ -509,6 +518,10 @@ function initAnimations() {
   }
 
   function tick() {
+    if (isAtPageTop()) {
+      rafId = null;
+      return;
+    }
     var ease = reduceMotion ? 1 : 0.1;
     current.r += (target.r - current.r) * ease;
     current.g += (target.g - current.g) * ease;
@@ -526,7 +539,7 @@ function initAnimations() {
   }
 
   function updateNavTint() {
-    var atRest = window.scrollY <= 20;
+    var atRest = isAtPageTop();
     nav.classList.toggle('scrolled', !atRest);
     if (atRest) {
       target = BASE_TINT;
@@ -550,6 +563,11 @@ function initAnimations() {
   window.addEventListener('scroll', updateNavTint, { passive: true });
   window.addEventListener('resize', updateNavTint, { passive: true });
   window.addEventListener('load', updateNavTint);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('scroll', updateNavTint, { passive: true });
+    window.visualViewport.addEventListener('resize', updateNavTint, { passive: true });
+  }
+  document.addEventListener('touchend', updateNavTint, { passive: true });
   updateNavTint();
 })();
 
