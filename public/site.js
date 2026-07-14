@@ -18,7 +18,7 @@ var PAGE_URLS = {
 };
 var SHAPE_SLUG = {
   rounds: 'round', pears: 'pear', marquise: 'marquise', ovals: 'oval',
-  hearts: 'heart', emerald: 'emerald', baguettes: 'baguette'
+  hearts: 'heart', emerald: 'emerald', baguettes: 'baguette', 'rose-cuts': 'rose-cuts'
 };
 
 // ═══════════════════════════════════════════
@@ -66,6 +66,13 @@ const shapes = [
     description: 'Clean lines. Sharp edges. Understated elegance. Baguettes are the architectural element of fine jewellery — and they require precise cutting and exceptional clarity to achieve their signature look. At SRS, we supply baguettes with crisp structure and consistent dimensions.',
     uncert: '0.10ct to 0.90ct', cert: '0.50ct and above', make: 'Sharp corners, precise proportions, excellent finish',
     why: ['Consistent dimensions for setting ease — critical when used as side stones', 'High clarity standards for full step-cut transparency', 'Top make in every stone, every parcel']
+  },
+  {
+    id: 'rose-cuts', name: 'Rose Cuts', tagline: 'Soft brilliance, enduring appeal', svgType: 'circle', image: '/diamond-shapes/round.png',
+    showInGrid: false,
+    description: 'Rose cut diamonds feature a flat base and domed crown covered in triangular facets — a cut dating to the 16th century that remains in high demand for antique-style and contemporary jewellery alike. At SRS, we supply round, pear and oval rose cuts to the size ranges below, held to the same G+ colour and top make standards as our brilliant cuts.',
+    uncert: 'Round 1mm to 7.5mm; Pear & Oval 0.10ct to 1.5ct', cert: 'On request', make: 'Top make, consistent faceting',
+    why: ['Round, pear and oval rose cuts stocked in practical size ranges', 'G+ colour and top make — the same SRS standard throughout', 'Ideal for signature pieces, halos and antique-inspired designs']
   }
 ];
 
@@ -94,7 +101,7 @@ function getShapeSVG(type, size, color) {
 function renderShapeCards(containerId) {
   const el = document.getElementById(containerId);
   if (!el) return;
-  el.innerHTML = shapes.map((s, i) => {
+  el.innerHTML = shapes.filter(s => s.showInGrid !== false).map((s, i) => {
     return `<a class="shape-card reveal reveal-d${Math.min(i+1,6)}" data-shape="${s.id}" href="/our-diamonds/${SHAPE_SLUG[s.id] || ''}">
       <div class="shape-img">
         <img class="shape-photo" src="${s.image || ''}" alt="${s.name} diamond shape" loading="lazy" decoding="async">
@@ -120,6 +127,81 @@ function renderShapeDetail(id) {
   const next = shapes[(idx + 1) % shapes.length];
   const content = document.getElementById('shape-detail-content');
   if (!content) return;
+  if (id === 'rose-cuts') {
+    content.innerHTML = `
+    <div class="shape-hero-section">
+      <div class="container">
+        <div class="shape-hero-grid">
+          <div class="shape-hero-text">
+            <div class="overline">Rose Cuts</div>
+            <h1>${s.name}</h1>
+            <div class="rule"></div>
+            <p>${s.tagline}</p>
+          </div>
+          <div class="shape-hero-visual">
+            <div class="shape-large-svg">${getShapeSVG(s.svgType, 220, '#C9A961')}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="section-pad" style="background:var(--white);">
+      <div class="container">
+        <div class="two-col gap-lg" style="align-items:start;">
+          <div class="reveal-left">
+            <div class="overline">About Rose Cuts</div>
+            <h2>${s.name}</h2>
+            <div class="rule"></div>
+            <p style="margin-top:20px; font-size:1.02rem;">${s.description}</p>
+          </div>
+          <div class="why-box reveal-right">
+            <h3>Why Clients Choose SRS for Rose Cuts</h3>
+            <ul class="why-list">
+              ${s.why.map(w => `<li>${w}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+        <div class="spec-bar reveal">
+          <div class="spec-item">
+            <div class="spec-label">Round Rose Cut</div>
+            <div class="spec-value">1mm to 7.5mm</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Pear Rose Cut</div>
+            <div class="spec-value">0.10ct to 1.5ct</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Oval Rose Cut</div>
+            <div class="spec-value">0.10ct to 1.5ct</div>
+          </div>
+        </div>
+        <div class="options-row reveal">
+          <div class="option-tile">
+            <h3>Round Rose Cut</h3>
+            <p>Stocked from 1mm to 7.5mm — ideal for pavé, halos and delicate settings.</p>
+          </div>
+          <div class="option-tile">
+            <h3>Pear Rose Cut</h3>
+            <p>Stocked from 0.10ct to 1.5ct — graceful silhouette for drops and centre stones.</p>
+          </div>
+          <div class="option-tile">
+            <h3>Oval Rose Cut</h3>
+            <p>Stocked from 0.10ct to 1.5ct — elongated presence with soft rose cut brilliance.</p>
+          </div>
+        </div>
+        <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-top:20px;" class="reveal">
+          <a class="btn btn-navy" href="/contact">Enquire About Rose Cuts</a>
+          <a class="btn btn-outline-navy" href="/our-diamonds">← All Shapes</a>
+          <div style="margin-left:auto; display:flex; gap:16px;">
+            <a class="btn-text-link" href="/our-diamonds/${SHAPE_SLUG[prev.id]}">← ${prev.name}</a>
+            <a class="btn-text-link" href="/our-diamonds/${SHAPE_SLUG[next.id]}">${next.name} →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+    initAnimations();
+    return;
+  }
   content.innerHTML = `
     <div class="shape-hero-section">
       <div class="container">

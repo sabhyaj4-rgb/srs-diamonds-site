@@ -75,7 +75,7 @@ export const PAGES: Record<string, PageSeo> = {
     path: "/our-diamonds",
     title: "Our Diamonds",
     description:
-      "Explore SRS Diamonds' polished diamond shapes — round, pear, marquise, oval, heart, emerald and baguette — sourced to one uncompromising standard.",
+      "Explore SRS Diamonds' polished diamond shapes — round, pear, marquise, oval, heart, emerald and baguette — plus round, pear and oval rose cuts, sourced to one uncompromising standard.",
     changeFrequency: "monthly",
     priority: 0.9,
   },
