@@ -23,11 +23,9 @@ var parts=location.hostname.split('.');var doms=[''];
 for(var i=0;i<parts.length-1;i++)doms.push('.'+parts.slice(i).join('.'));
 function clearC(){var p='Thu, 01 Jan 1970 00:00:00 UTC';doms.forEach(function(d){document.cookie='googtrans=;expires='+p+';path=/'+(d?';domain='+d:'');});}
 function setC(c){clearC();if(c==='en')return;var v='/en/'+c;doms.forEach(function(d){document.cookie='googtrans='+v+';path=/'+(d?';domain='+d:'');});}
-var nav=(performance.getEntriesByType&&performance.getEntriesByType('navigation')[0]);
-var t=nav?nav.type:((performance.navigation&&performance.navigation.type===1)?'reload':'navigate');
 var s=null;try{s=sessionStorage.getItem('srsLang');}catch(e){}
 var ok=['fr','it','es','nl','ar'];
-if(t==='reload'||!s||ok.indexOf(s)<0){try{sessionStorage.removeItem('srsLang');}catch(e){}clearC();}
+if(!s||ok.indexOf(s)<0){try{sessionStorage.removeItem('srsLang');}catch(e){}clearC();}
 else{setC(s);}
 }catch(e){}})();`;
 
@@ -57,6 +55,9 @@ export default function RootLayout({
         <Script id="srs-lang-early" strategy="beforeInteractive">
           {LANG_EARLY}
         </Script>
+        <Script id="gtranslate-settings" strategy="beforeInteractive">
+          {GTRANSLATE_SETTINGS}
+        </Script>
       </head>
       <body>
         <div dangerouslySetInnerHTML={{ __html: fragment("_header") }} />
@@ -65,9 +66,6 @@ export default function RootLayout({
         <div className="gtranslate_wrapper" />
 
         <Script src="/site.js" strategy="afterInteractive" />
-        <Script id="gtranslate-settings" strategy="afterInteractive">
-          {GTRANSLATE_SETTINGS}
-        </Script>
         <Script
           src="https://cdn.gtranslate.net/widgets/latest/dropdown.js"
           strategy="afterInteractive"

@@ -329,11 +329,11 @@ function toggleMobileSubmenu(menuKey) {
 // ═══════════════════════════════════════════
 // LANGUAGE SWITCHER (drives GTranslate)
 // Behaviour for the multi-page site:
-//  • Fresh visit or browser refresh always starts in English (the googtrans
-//    cookie is cleared by an early inline script before GTranslate loads).
-//  • Choosing a language stores it for the session (sessionStorage) and sets
-//    the cookie, so it persists as the visitor clicks through to other pages.
-//  • Choosing English clears it and reloads to restore the original page.
+//  • Fresh visit starts in English (no session language stored).
+//  • Choosing a language stores it for the session, sets the googtrans cookie,
+//    and reloads so GTranslate can translate the full page reliably.
+//  • The early inline script restores the cookie on each page load while the
+//    session language is still set.
 // ═══════════════════════════════════════════
 const SUPPORTED_LANGS = ['en', 'fr', 'it', 'es', 'nl', 'ar'];
 
@@ -379,45 +379,24 @@ function updateSwitcherLabel(code) {
     el.classList.toggle('lang-active', el.getAttribute('data-lang') === code);
   });
 }
-function translateInPlace(code) {
-  const combo = document.querySelector('select.goog-te-combo');
-  if (!combo) return false;
-  combo.value = code;
-  combo.dispatchEvent(new Event('change'));
-  return true;
-}
 function setLanguage(code) {
   if (!SUPPORTED_LANGS.includes(code)) code = 'en';
   closeMenu();
-  if (code === 'en') {
-    storeLang('en');
-    clearGoogTransCookie();
-    updateSwitcherLabel('en');
-    location.reload();
-    return;
-  }
   storeLang(code);
-  setGoogTransCookie(code);
-  updateSwitcherLabel(code);
-  if (!translateInPlace(code)) {
-    let tries = 0;
-    const timer = setInterval(() => {
-      if (translateInPlace(code) || ++tries > 50) clearInterval(timer);
-    }, 100);
-  }
+  if (code === 'en') clearGoogTransCookie();
+  else setGoogTransCookie(code);
+  location.reload();
 }
 function initLanguageState() {
-  const code = storedLang();
-  updateSwitcherLabel(code);
-  // The early inline script already set/cleared the cookie so GTranslate
-  // auto-translates on load. Retry in-place as a fallback if needed.
-  if (code !== 'en') {
-    let tries = 0;
-    const timer = setInterval(() => {
-      if (translateInPlace(code) || ++tries > 50) clearInterval(timer);
-    }, 100);
-  }
+  updateSwitcherLabel(storedLang());
 }
+
+// Inline onclick handlers in the header/footer HTML need globals.
+window.setLanguage = setLanguage;
+window.toggleMenu = toggleMenu;
+window.toggleMobileSubmenu = toggleMobileSubmenu;
+window.navigate = navigate;
+window.navigateShape = navigateShape;
 
 // ═══════════════════════════════════════════
 // CONTACT FORM — country select helper
